@@ -5,8 +5,6 @@ on:
     branches: [main]
     paths:
       - 'website/**'
-      - 'lore-server/data/**'
-      - 'scripts/export-lore.ts'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
@@ -30,14 +28,6 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-
-      - name: Install dependencies
-        run: |
-          bun install
-          cd lore-server && bun install
-
-      - name: Export lore from database
-        run: bun run scripts/export-lore.ts
 
       - name: Build website
         run: |

@@ -26,6 +26,3 @@ lore-server/data/logs/
 # Website build artifacts
 website/dist/
 website/.astro/
-
-# Exported lore content (regenerated from database)
-website/src/content/lore/
