@@ -1,5 +1,5 @@
 import { readdir } from "node:fs/promises";
-import * as path from "path";
+import * as path from "node:path";
 import * as db from "./db.js";
 import type { CreateEntryInput } from "./types.js";
 
@@ -13,10 +13,7 @@ interface ParsedSection {
   sourceFile: string;
 }
 
-function parseMarkdownSections(
-  content: string,
-  sourceFile: string
-): ParsedSection[] {
+function parseMarkdownSections(content: string, sourceFile: string): ParsedSection[] {
   const lines = content.split("\n");
   const sections: ParsedSection[] = [];
   const headingStack: string[] = [];
@@ -74,70 +71,45 @@ function inferCategory(headingPath: string[], sourceFile: string): string {
   const pathLower = headingPath.map((h) => h.toLowerCase());
   const fileLower = sourceFile.toLowerCase();
 
-  if (
-    pathLower.some((h) => h.includes("architecture") || h.includes("building"))
-  ) {
+  if (pathLower.some((h) => h.includes("architecture") || h.includes("building"))) {
     return "architecture";
   }
   if (pathLower.some((h) => h.includes("material"))) {
     return "materials";
   }
-  if (
-    pathLower.some(
-      (h) =>
-        h.includes("character") || h.includes("npc") || h.includes("figure")
-    )
-  ) {
+  if (pathLower.some((h) => h.includes("character") || h.includes("npc") || h.includes("figure"))) {
     return "characters";
   }
-  if (
-    pathLower.some((h) => h.includes("location") || h.includes("province"))
-  ) {
+  if (pathLower.some((h) => h.includes("location") || h.includes("province"))) {
     return "locations";
   }
   if (pathLower.some((h) => h.includes("faction") || h.includes("guild"))) {
     return "factions";
   }
-  if (
-    pathLower.some((h) => h.includes("technology") || h.includes("whisker-punk"))
-  ) {
+  if (pathLower.some((h) => h.includes("technology") || h.includes("whisker-punk"))) {
     return "technology";
   }
   if (pathLower.some((h) => h.includes("profession") || h.includes("career"))) {
     return "professions";
   }
   if (
-    pathLower.some(
-      (h) => h.includes("culture") || h.includes("custom") || h.includes("society")
-    )
+    pathLower.some((h) => h.includes("culture") || h.includes("custom") || h.includes("society"))
   ) {
     return "culture";
   }
-  if (
-    pathLower.some(
-      (h) => h.includes("food") || h.includes("cuisine") || h.includes("dish")
-    )
-  ) {
+  if (pathLower.some((h) => h.includes("food") || h.includes("cuisine") || h.includes("dish"))) {
     return "cuisine";
   }
-  if (
-    pathLower.some((h) => h.includes("history") || h.includes("historical"))
-  ) {
+  if (pathLower.some((h) => h.includes("history") || h.includes("historical"))) {
     return "history";
   }
   if (pathLower.some((h) => h.includes("flora") || h.includes("plant"))) {
     return "flora";
   }
-  if (
-    pathLower.some((h) => h.includes("fauna") || h.includes("animal"))
-  ) {
+  if (pathLower.some((h) => h.includes("fauna") || h.includes("animal"))) {
     return "fauna";
   }
-  if (
-    pathLower.some(
-      (h) => h.includes("mystery") || h.includes("unexplained")
-    )
-  ) {
+  if (pathLower.some((h) => h.includes("mystery") || h.includes("unexplained"))) {
     return "mysteries";
   }
   if (pathLower.some((h) => h.includes("language") || h.includes("dialect"))) {
@@ -229,9 +201,7 @@ async function main() {
 
   const files = await readdir(originalsPath);
   const mdFiles = files.filter(
-    (f) =>
-      f.endsWith(".md") &&
-      f.startsWith("whisker-") // Only import the main lore files
+    (f) => f.endsWith(".md") && f.startsWith("whisker-"), // Only import the main lore files
   );
 
   console.log(`Found ${mdFiles.length} lore files to import\n`);
@@ -245,7 +215,7 @@ async function main() {
     console.log(`  Done: ${count} entries\n`);
   }
 
-  console.log(`\nImport complete!`);
+  console.log("\nImport complete!");
   console.log(`Total entries: ${totalImported}`);
 
   // Show category breakdown

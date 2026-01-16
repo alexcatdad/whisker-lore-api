@@ -1,29 +1,19 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
-  ListToolsRequestSchema,
   CallToolRequestSchema,
-  CallToolResult,
+  type CallToolResult,
+  ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import * as db from "./db.js";
-import {
-  healthCheck as ollamaHealthCheck,
-  OLLAMA_URL,
-  EMBEDDING_MODEL,
-} from "./embeddings.js";
-import {
-  log,
-  registerCrashHandlers,
-  startRequest,
-  endRequest,
-  createTimer,
-} from "./logger.js";
+import { EMBEDDING_MODEL, OLLAMA_URL, healthCheck as ollamaHealthCheck } from "./embeddings.js";
+import { createTimer, endRequest, log, registerCrashHandlers, startRequest } from "./logger.js";
 
 const VERSION = "0.3.0";
 
 const server = new Server(
   { name: "whisker-lore-server", version: VERSION },
-  { capabilities: { tools: { listChanged: true } } }
+  { capabilities: { tools: { listChanged: true } } },
 );
 
 // Tool definitions
@@ -177,32 +167,29 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 });
 
 // Tool implementations with request tracing
-server.setRequestHandler(
-  CallToolRequestSchema,
-  async (request): Promise<CallToolResult> => {
-    const { name, arguments: args } = request.params;
-    const timer = createTimer();
-    const requestId = startRequest(name, args);
+server.setRequestHandler(CallToolRequestSchema, async (request): Promise<CallToolResult> => {
+  const { name, arguments: args } = request.params;
+  const timer = createTimer();
+  const requestId = startRequest(name, args);
 
-    try {
-      const result = await handleToolCall(name, args ?? {});
-      endRequest(requestId, timer(), true);
-      return result;
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      log.error(`TOOL_ERROR:${name}`, error);
-      endRequest(requestId, timer(), false);
-      return {
-        content: [{ type: "text", text: `Error: ${message}` }],
-        isError: true,
-      };
-    }
+  try {
+    const result = await handleToolCall(name, args ?? {});
+    endRequest(requestId, timer(), true);
+    return result;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    log.error(`TOOL_ERROR:${name}`, error);
+    endRequest(requestId, timer(), false);
+    return {
+      content: [{ type: "text", text: `Error: ${message}` }],
+      isError: true,
+    };
   }
-);
+});
 
 async function handleToolCall(
   name: string,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ): Promise<CallToolResult> {
   switch (name) {
     case "search_lore": {
@@ -246,18 +233,14 @@ async function handleToolCall(
         tags: e.tags,
       }));
       return {
-        content: [
-          { type: "text", text: JSON.stringify(summaries, null, 2) },
-        ],
+        content: [{ type: "text", text: JSON.stringify(summaries, null, 2) }],
       };
     }
 
     case "list_categories": {
       const categories = await db.getCategories();
       return {
-        content: [
-          { type: "text", text: JSON.stringify(categories, null, 2) },
-        ],
+        content: [{ type: "text", text: JSON.stringify(categories, null, 2) }],
       };
     }
 
@@ -333,7 +316,7 @@ async function handleToolCall(
         if (!byCategory.has(cat)) {
           byCategory.set(cat, []);
         }
-        byCategory.get(cat)!.push(entry);
+        byCategory.get(cat)?.push(entry);
       }
 
       // Generate markdown

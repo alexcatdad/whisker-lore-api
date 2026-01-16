@@ -1,13 +1,13 @@
 import * as lancedb from "@lancedb/lancedb";
 import { v4 as uuidv4 } from "uuid";
 import { embed } from "./embeddings.js";
-import { log, createTimer } from "./logger.js";
+import { createTimer, log } from "./logger.js";
 import type {
+  CreateEntryInput,
   LoreEntry,
   LoreEntryWithVector,
-  CreateEntryInput,
-  UpdateEntryInput,
   SearchResult,
+  UpdateEntryInput,
 } from "./types.js";
 
 export const DB_PATH = process.env.LORE_DB_PATH || "./data/lore_db";
@@ -20,7 +20,7 @@ class DbError extends Error {
   constructor(
     message: string,
     public readonly operation: string,
-    public readonly recoverable: boolean = false
+    public readonly recoverable: boolean = false,
   ) {
     super(message);
     this.name = "DbError";
@@ -30,7 +30,7 @@ class DbError extends Error {
 async function withRetry<T>(
   operation: string,
   fn: () => Promise<T>,
-  maxAttempts: number = MAX_RECONNECT_ATTEMPTS
+  maxAttempts: number = MAX_RECONNECT_ATTEMPTS,
 ): Promise<T> {
   let lastError: Error | null = null;
 
@@ -61,11 +61,7 @@ async function withRetry<T>(
   }
 
   log.dbOperationError(operation, lastError?.message || "Unknown error");
-  throw new DbError(
-    `${operation} failed: ${lastError?.message}`,
-    operation,
-    false
-  );
+  throw new DbError(`${operation} failed: ${lastError?.message}`, operation, false);
 }
 
 export async function connect(): Promise<void> {
@@ -91,13 +87,16 @@ export async function ensureTable(): Promise<lancedb.Table> {
   if (!db) {
     await connect();
   }
+  if (!db) {
+    throw new DbError("Database connection failed", "ENSURE_TABLE", false);
+  }
 
   if (!table) {
     // Create empty table with schema
     const now = new Date().toISOString();
     const emptyVector = await embed("initialization");
 
-    table = await db!.createTable(
+    table = await db.createTable(
       "lore",
       [
         {
@@ -113,7 +112,7 @@ export async function ensureTable(): Promise<lancedb.Table> {
           vector: emptyVector,
         },
       ],
-      { mode: "overwrite" }
+      { mode: "overwrite" },
     );
 
     // Delete the init row
@@ -126,7 +125,7 @@ export async function ensureTable(): Promise<lancedb.Table> {
 export async function searchLore(
   query: string,
   category?: string,
-  limit: number = 10
+  limit = 10,
 ): Promise<SearchResult[]> {
   return withRetry("SEARCH", async () => {
     const tbl = await ensureTable();
@@ -209,10 +208,7 @@ export async function createEntry(input: CreateEntryInput): Promise<LoreEntry> {
   });
 }
 
-export async function updateEntry(
-  id: string,
-  input: UpdateEntryInput
-): Promise<LoreEntry | null> {
+export async function updateEntry(id: string, input: UpdateEntryInput): Promise<LoreEntry | null> {
   return withRetry("UPDATE_ENTRY", async () => {
     const existing = await getEntry(id);
     if (!existing) {
@@ -251,7 +247,7 @@ export async function updateEntry(
     await tbl.add([row as unknown as Record<string, unknown>]);
 
     const fieldsUpdated = Object.keys(input).filter(
-      (k) => input[k as keyof UpdateEntryInput] !== undefined
+      (k) => input[k as keyof UpdateEntryInput] !== undefined,
     );
     log.updateEntry(id, updated.title, fieldsUpdated);
 

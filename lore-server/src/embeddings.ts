@@ -1,17 +1,17 @@
-import { log, createTimer } from "./logger.js";
+import { createTimer, log } from "./logger.js";
 
 export const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 export const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL || "nomic-embed-text";
 
-const TIMEOUT_MS = parseInt(process.env.OLLAMA_TIMEOUT_MS || "30000", 10);
-const MAX_RETRIES = parseInt(process.env.OLLAMA_MAX_RETRIES || "3", 10);
+const TIMEOUT_MS = Number.parseInt(process.env.OLLAMA_TIMEOUT_MS || "30000", 10);
+const MAX_RETRIES = Number.parseInt(process.env.OLLAMA_MAX_RETRIES || "3", 10);
 const RETRY_BASE_DELAY_MS = 1000;
 
 class OllamaError extends Error {
   constructor(
     message: string,
     public readonly statusCode?: number,
-    public readonly retryable: boolean = false
+    public readonly retryable: boolean = false,
   ) {
     super(message);
     this.name = "OllamaError";
@@ -46,7 +46,7 @@ async function embedWithRetry(text: string): Promise<number[]> {
         throw new OllamaError(
           `Ollama embedding failed: ${response.status} ${response.statusText}`,
           response.status,
-          isRetryable
+          isRetryable,
         );
       }
 
@@ -63,7 +63,7 @@ async function embedWithRetry(text: string): Promise<number[]> {
         lastError = new OllamaError(
           `Ollama request timed out after ${TIMEOUT_MS}ms`,
           undefined,
-          true
+          true,
         );
       }
 
@@ -77,7 +77,7 @@ async function embedWithRetry(text: string): Promise<number[]> {
             lastError.message.includes("fetch failed");
 
       if (isRetryable && attempt < MAX_RETRIES) {
-        const delayMs = RETRY_BASE_DELAY_MS * Math.pow(2, attempt - 1);
+        const delayMs = RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
         log.ollamaRetry(attempt, MAX_RETRIES, lastError.message);
         await sleep(delayMs);
         continue;

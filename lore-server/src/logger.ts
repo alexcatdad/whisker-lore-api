@@ -1,6 +1,6 @@
-import * as fs from "fs";
-import * as path from "path";
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 const LOG_DIR = process.env.LOG_DIR || "./data/logs";
 const LOG_FILE = path.join(LOG_DIR, "lore-db.log");
@@ -23,7 +23,7 @@ function formatTimestamp(): string {
 function formatLogEntry(
   level: "INFO" | "WARN" | "ERROR",
   operation: string,
-  details: Record<string, unknown>
+  details: Record<string, unknown>,
 ): string {
   const timestamp = formatTimestamp();
   const reqId = currentRequestId ? `[${currentRequestId}]` : "[-]";
@@ -92,7 +92,9 @@ export function registerCrashHandlers(): void {
       stack: error.stack,
       name: error.name,
     });
-    writeCrashDump(`\n${"=".repeat(80)}\nCRASH DUMP - UNCAUGHT EXCEPTION\n${"=".repeat(80)}\n${entry}`);
+    writeCrashDump(
+      `\n${"=".repeat(80)}\nCRASH DUMP - UNCAUGHT EXCEPTION\n${"=".repeat(80)}\n${entry}`,
+    );
     process.exit(1);
   });
 
@@ -103,7 +105,9 @@ export function registerCrashHandlers(): void {
       stack: error.stack,
       reason: String(reason),
     });
-    writeCrashDump(`\n${"=".repeat(80)}\nCRASH DUMP - UNHANDLED REJECTION\n${"=".repeat(80)}\n${entry}`);
+    writeCrashDump(
+      `\n${"=".repeat(80)}\nCRASH DUMP - UNHANDLED REJECTION\n${"=".repeat(80)}\n${entry}`,
+    );
     process.exit(1);
   });
 
@@ -122,14 +126,12 @@ export function registerCrashHandlers(): void {
 
 // Convenience functions for common operations
 export const log = {
-  connect: (dbPath: string) =>
-    logInfo("CONNECT", { dbPath }),
+  connect: (dbPath: string) => logInfo("CONNECT", { dbPath }),
 
   search: (query: string, category: string | undefined, limit: number, resultCount: number) =>
     logInfo("SEARCH", { query, category, limit, resultCount }),
 
-  getEntry: (id: string, found: boolean) =>
-    logInfo("GET_ENTRY", { id, found }),
+  getEntry: (id: string, found: boolean) => logInfo("GET_ENTRY", { id, found }),
 
   listEntries: (category: string | undefined, count: number) =>
     logInfo("LIST_ENTRIES", { category, count }),
@@ -140,8 +142,7 @@ export const log = {
   updateEntry: (id: string, title: string, fieldsUpdated: string[]) =>
     logInfo("UPDATE_ENTRY", { id, title, fieldsUpdated }),
 
-  deleteEntry: (id: string, title: string) =>
-    logInfo("DELETE_ENTRY", { id, title }),
+  deleteEntry: (id: string, title: string) => logInfo("DELETE_ENTRY", { id, title }),
 
   bulkInsert: (count: number, categories: string[]) =>
     logInfo("BULK_INSERT", { count, categories }),
@@ -159,12 +160,10 @@ export const log = {
   ollamaRetry: (attempt: number, maxAttempts: number, error: string) =>
     logWarn("OLLAMA_RETRY", { attempt, maxAttempts, error }),
 
-  ollamaTimeout: (timeoutMs: number) =>
-    logError("OLLAMA_TIMEOUT", { timeoutMs }),
+  ollamaTimeout: (timeoutMs: number) => logError("OLLAMA_TIMEOUT", { timeoutMs }),
 
   // DB operations
-  dbReconnect: (attempt: number, reason: string) =>
-    logWarn("DB_RECONNECT", { attempt, reason }),
+  dbReconnect: (attempt: number, reason: string) => logWarn("DB_RECONNECT", { attempt, reason }),
 
   dbOperationError: (operation: string, error: string) =>
     logError("DB_OPERATION_ERROR", { operation, error }),
@@ -179,6 +178,6 @@ export const log = {
   error: (operation: string, error: unknown) =>
     logError(operation, {
       error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined
+      stack: error instanceof Error ? error.stack : undefined,
     }),
 };
