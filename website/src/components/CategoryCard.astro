@@ -1,4 +1,6 @@
 ---
+import CategoryIcon from "./CategoryIcon.astro";
+
 interface Props {
   category: string;
   count: number;
@@ -25,25 +27,8 @@ const categoryDescriptions: Record<string, string> = {
   world: "Geography, cosmology, and world mechanics",
 };
 
-const categoryIcons: Record<string, string> = {
-  architecture: "M3 21V8l9-5 9 5v13H3zm2-2h14V9.11L12 5.36 5 9.11V19zm7-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
-  characters: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
-  cuisine: "M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z",
-  culture: "M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z",
-  factions: "M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z",
-  flora: "M12 22a9.733 9.733 0 0 1-3.67-.71c-.27-.1-.5-.28-.66-.52-.16-.24-.24-.52-.24-.81V19a6.5 6.5 0 0 1-4.18-3.08 6.5 6.5 0 0 1 .74-7.38A6.5 6.5 0 0 1 11.5 6v.5A2.5 2.5 0 0 0 14 9h.5a6.47 6.47 0 0 1 5.5 3.5 6.5 6.5 0 0 1-4 9.04v-.58c0-.29-.08-.57-.24-.81-.16-.24-.39-.42-.66-.52A9.73 9.73 0 0 1 12 22z",
-  general: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z",
-  history: "M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z",
-  locations: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
-  politics: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z",
-  professions: "M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z",
-  society: "M16.5 13c-1.2 0-3.07.34-4.5 1-1.43-.67-3.3-1-4.5-1C5.33 13 1 14.08 1 16.25V19h22v-2.75c0-2.17-4.33-3.25-6.5-3.25zm-4 4.5h-10v-1.25c0-.54 2.56-1.75 5-1.75s5 1.21 5 1.75v1.25zm9 0H14v-1.25c0-.46-.2-.86-.52-1.22.88-.3 1.96-.53 3.02-.53 2.44 0 5 1.21 5 1.75v1.25zM7.5 12c1.93 0 3.5-1.57 3.5-3.5S9.43 5 7.5 5 4 6.57 4 8.5 5.57 12 7.5 12zm0-5.5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 5.5c1.93 0 3.5-1.57 3.5-3.5S18.43 5 16.5 5 13 6.57 13 8.5s1.57 3.5 3.5 3.5zm0-5.5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z",
-  technology: "M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z",
-  world: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z",
-};
-
 const displayDescription = description || categoryDescriptions[category] || "Explore this category";
-const iconPath = categoryIcons[category] || categoryIcons.general;
+const iconSize = size === "large" ? 64 : 48;
 ---
 
 <a 
@@ -52,9 +37,7 @@ const iconPath = categoryIcons[category] || categoryIcons.general;
   data-category={category}
 >
   <div class="category-card__icon">
-    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-      <path fill="currentColor" d={iconPath} />
-    </svg>
+    <CategoryIcon category={category} size={iconSize} animate />
   </div>
   
   <div class="category-card__content">
@@ -140,33 +123,22 @@ const iconPath = categoryIcons[category] || categoryIcons.general;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 3rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
     background-color: var(--category-bg);
-    border-radius: var(--radius-lg);
-    color: var(--category-color);
+    border-radius: var(--radius-xl);
     transition: all var(--duration-normal) var(--ease-out-expo);
+    overflow: hidden;
   }
 
   .category-card:hover .category-card__icon {
-    background-color: var(--category-color);
-    color: var(--color-bg-primary);
-    transform: scale(1.05);
-  }
-
-  .category-card__icon svg {
-    width: 1.5rem;
-    height: 1.5rem;
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(var(--category-hue), 40%, 50%, 0.3);
   }
 
   .category-card--large .category-card__icon {
-    width: 4rem;
-    height: 4rem;
-  }
-
-  .category-card--large .category-card__icon svg {
-    width: 2rem;
-    height: 2rem;
+    width: 4.5rem;
+    height: 4.5rem;
   }
 
   /* Content */

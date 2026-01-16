@@ -9,34 +9,34 @@
   --color-bg-secondary: #f5efe5;
   --color-bg-tertiary: #ebe4d8;
   --color-bg-elevated: #ffffff;
-  
+
   --color-text-primary: #2c1810;
   --color-text-secondary: #5c4a3d;
   --color-text-tertiary: #8b7355;
   --color-text-inverse: #faf6f0;
-  
+
   --color-accent-primary: #b87333;
   --color-accent-secondary: #b5a642;
   --color-accent-tertiary: #8b6914;
   --color-accent-highlight: #d4663a;
-  
+
   --color-border: rgba(44, 24, 16, 0.12);
   --color-border-strong: rgba(44, 24, 16, 0.25);
-  
+
   --shadow-sm: 0 1px 3px rgba(44, 24, 16, 0.08);
   --shadow-md: 0 4px 12px rgba(44, 24, 16, 0.1);
   --shadow-lg: 0 12px 40px rgba(44, 24, 16, 0.15);
   --shadow-glow: 0 0 30px rgba(184, 115, 51, 0.15);
-  
+
   --gradient-hero: linear-gradient(
     180deg,
     var(--color-bg-primary) 0%,
     var(--color-bg-secondary) 100%
   );
-  
+
   --texture-opacity: 0.04;
   --gear-opacity: 0.08;
-  
+
   color-scheme: light;
 }
 
@@ -46,43 +46,47 @@
   --color-bg-secondary: #1a1f2e;
   --color-bg-tertiary: #252b3d;
   --color-bg-elevated: #2a3142;
-  
+
   --color-text-primary: #e8e4dc;
   --color-text-secondary: #b8b0a0;
   --color-text-tertiary: #7a7265;
   --color-text-inverse: #0f1419;
-  
+
   --color-accent-primary: #e09850;
   --color-accent-secondary: #d4c36a;
   --color-accent-tertiary: #c9a84c;
   --color-accent-highlight: #ff8c5a;
-  
+
   --color-border: rgba(232, 228, 220, 0.1);
   --color-border-strong: rgba(232, 228, 220, 0.2);
-  
+
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
   --shadow-glow: 0 0 40px rgba(224, 152, 80, 0.2);
-  
+
   --gradient-hero: linear-gradient(
     180deg,
     var(--color-bg-primary) 0%,
     var(--color-bg-secondary) 100%
   );
-  
+
   --texture-opacity: 0.03;
   --gear-opacity: 0.06;
-  
+
   color-scheme: dark;
 }
 
 :root {
   /* ─── Typography ─── */
-  --font-display: "Shippori Mincho", "Hiragino Mincho Pro", serif;
-  --font-heading: "Zen Kaku Gothic New", "Hiragino Kaku Gothic Pro", sans-serif;
-  --font-body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic Pro", sans-serif;
-  
+  /* Cormorant Garamond: Elegant old-world serif for display headers */
+  --font-display: "Cormorant Garamond", "Hiragino Mincho Pro", serif;
+  /* Crimson Pro: Warm, refined serif for headings */
+  --font-heading: "Crimson Pro", "Hiragino Mincho Pro", serif;
+  /* Noto Sans JP: Clean, professional Japanese-friendly body text */
+  --font-body: "Noto Sans JP", "Hiragino Kaku Gothic Pro", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", monospace;
+
   --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem);
   --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem);
   --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1rem);
@@ -93,18 +97,18 @@
   --text-4xl: clamp(2.2rem, 1.8rem + 1.5vw, 2.75rem);
   --text-5xl: clamp(2.8rem, 2.2rem + 2vw, 3.5rem);
   --text-display: clamp(3.5rem, 2.5rem + 3.5vw, 5rem);
-  
+
   --leading-tight: 1.2;
   --leading-snug: 1.35;
   --leading-normal: 1.6;
   --leading-relaxed: 1.8;
-  
+
   --tracking-tight: -0.02em;
   --tracking-normal: 0;
   --tracking-wide: 0.02em;
   --tracking-wider: 0.05em;
   --tracking-widest: 0.1em;
-  
+
   /* ─── Spacing ─── */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -119,31 +123,31 @@
   --space-20: 5rem;
   --space-24: 6rem;
   --space-32: 8rem;
-  
+
   /* ─── Layout ─── */
   --max-width-prose: 68ch;
   --max-width-content: 1400px;
   --max-width-wide: 1800px;
   --header-height: 4.5rem;
   --sidebar-width: 280px;
-  
+
   /* ─── Borders & Radius ─── */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
-  
+
   /* ─── Transitions ─── */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  
+
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 500ms;
   --duration-slower: 800ms;
-  
+
   /* ─── Z-Index Scale ─── */
   --z-below: -1;
   --z-base: 0;
@@ -154,20 +158,48 @@
 }
 
 /* ─── Category Colors ─── */
-[data-category="architecture"] { --category-hue: 35; }
-[data-category="characters"] { --category-hue: 25; }
-[data-category="cuisine"] { --category-hue: 40; }
-[data-category="culture"] { --category-hue: 30; }
-[data-category="factions"] { --category-hue: 20; }
-[data-category="flora"] { --category-hue: 90; }
-[data-category="general"] { --category-hue: 45; }
-[data-category="history"] { --category-hue: 28; }
-[data-category="locations"] { --category-hue: 120; }
-[data-category="politics"] { --category-hue: 15; }
-[data-category="professions"] { --category-hue: 50; }
-[data-category="society"] { --category-hue: 22; }
-[data-category="technology"] { --category-hue: 38; }
-[data-category="world"] { --category-hue: 100; }
+[data-category="architecture"] {
+  --category-hue: 35;
+}
+[data-category="characters"] {
+  --category-hue: 25;
+}
+[data-category="cuisine"] {
+  --category-hue: 40;
+}
+[data-category="culture"] {
+  --category-hue: 30;
+}
+[data-category="factions"] {
+  --category-hue: 20;
+}
+[data-category="flora"] {
+  --category-hue: 90;
+}
+[data-category="general"] {
+  --category-hue: 45;
+}
+[data-category="history"] {
+  --category-hue: 28;
+}
+[data-category="locations"] {
+  --category-hue: 120;
+}
+[data-category="politics"] {
+  --category-hue: 15;
+}
+[data-category="professions"] {
+  --category-hue: 50;
+}
+[data-category="society"] {
+  --category-hue: 22;
+}
+[data-category="technology"] {
+  --category-hue: 38;
+}
+[data-category="world"] {
+  --category-hue: 100;
+}
 
 [data-category] {
   --category-color: hsl(var(--category-hue), 55%, 45%);

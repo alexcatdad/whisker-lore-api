@@ -1,0 +1,792 @@
+---
+/**
+ * CategoryIcon.astro
+ * Unique, elaborate SVG icons for each lore category
+ * Cat-themed and Whisker-Punk inspired
+ */
+
+interface Props {
+  category: string;
+  size?: number;
+  animate?: boolean;
+}
+
+const { category, size = 48, animate = false } = Astro.props;
+---
+
+<div class:list={["category-icon", { "category-icon--animate": animate }]} style={`width: ${size}px; height: ${size}px;`}>
+  {category === "architecture" && (
+    <!-- Pagoda with Gears -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="arch-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Pagoda roof layers -->
+      <path d="M32 4 L8 18 L12 18 L32 8 L52 18 L56 18 Z" fill="url(#arch-grad)" class="roof roof-1" />
+      <path d="M32 14 L12 26 L16 26 L32 18 L48 26 L52 26 Z" fill="url(#arch-grad)" class="roof roof-2" />
+      <path d="M32 24 L16 34 L20 34 L32 28 L44 34 L48 34 Z" fill="url(#arch-grad)" class="roof roof-3" />
+      <!-- Building body -->
+      <rect x="22" y="34" width="20" height="24" fill="url(#arch-grad)" rx="2" />
+      <!-- Door -->
+      <path d="M28 58 L28 44 Q32 40 36 44 L36 58 Z" fill="var(--color-bg-primary)" />
+      <!-- Windows -->
+      <circle cx="27" cy="40" r="2" fill="var(--color-bg-primary)" />
+      <circle cx="37" cy="40" r="2" fill="var(--color-bg-primary)" />
+      <!-- Decorative gears -->
+      <g class="gear-decor">
+        <circle cx="10" cy="50" r="6" fill="none" stroke="var(--category-color)" stroke-width="1.5" opacity="0.6" />
+        <circle cx="10" cy="50" r="2" fill="var(--category-color)" opacity="0.6" />
+        <circle cx="54" cy="50" r="5" fill="none" stroke="var(--category-color)" stroke-width="1.5" opacity="0.6" />
+        <circle cx="54" cy="50" r="1.5" fill="var(--category-color)" opacity="0.6" />
+      </g>
+      <!-- Cat silhouette in window -->
+      <ellipse cx="32" cy="48" rx="2.5" ry="2" fill="var(--category-color)" opacity="0.7" />
+      <path d="M30 47 L29 45 L30.5 46.5 M34 47 L35 45 L33.5 46.5" stroke="var(--category-color)" stroke-width="0.8" fill="none" opacity="0.7" />
+    </svg>
+  )}
+
+  {category === "characters" && (
+    <!-- Stylized Cat Portrait -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="char-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Decorative frame -->
+      <circle cx="32" cy="32" r="28" fill="none" stroke="var(--category-color)" stroke-width="2" opacity="0.3" />
+      <circle cx="32" cy="32" r="24" fill="var(--category-bg)" />
+      <!-- Cat face -->
+      <ellipse cx="32" cy="36" rx="16" ry="14" fill="url(#char-grad)" />
+      <!-- Ears -->
+      <path d="M18 28 L14 12 L24 22 Z" fill="url(#char-grad)" class="ear-left" />
+      <path d="M46 28 L50 12 L40 22 Z" fill="url(#char-grad)" class="ear-right" />
+      <path d="M19 26 L16 15 L23 22 Z" fill="#ffb6c1" opacity="0.6" />
+      <path d="M45 26 L48 15 L41 22 Z" fill="#ffb6c1" opacity="0.6" />
+      <!-- Eyes -->
+      <ellipse cx="26" cy="34" rx="4" ry="5" fill="var(--color-bg-primary)" />
+      <ellipse cx="38" cy="34" rx="4" ry="5" fill="var(--color-bg-primary)" />
+      <ellipse cx="26" cy="34" rx="2" ry="3" fill="#2c1810" class="pupil" />
+      <ellipse cx="38" cy="34" rx="2" ry="3" fill="#2c1810" class="pupil" />
+      <circle cx="27" cy="33" r="1" fill="white" />
+      <circle cx="39" cy="33" r="1" fill="white" />
+      <!-- Nose -->
+      <path d="M32 40 L30 43 L34 43 Z" fill="#ffb6c1" />
+      <!-- Mouth -->
+      <path d="M28 45 Q32 48 36 45" stroke="#2c1810" stroke-width="1" fill="none" />
+      <!-- Whiskers -->
+      <g stroke="var(--category-color-muted)" stroke-width="0.8" opacity="0.8">
+        <line x1="20" y1="38" x2="10" y2="36" />
+        <line x1="20" y1="41" x2="9" y2="42" />
+        <line x1="20" y1="44" x2="10" y2="48" />
+        <line x1="44" y1="38" x2="54" y2="36" />
+        <line x1="44" y1="41" x2="55" y2="42" />
+        <line x1="44" y1="44" x2="54" y2="48" />
+      </g>
+      <!-- Decorative collar -->
+      <path d="M20 48 Q32 56 44 48" stroke="var(--category-color)" stroke-width="2" fill="none" />
+      <circle cx="32" cy="52" r="3" fill="var(--category-color)" />
+    </svg>
+  )}
+
+  {category === "cuisine" && (
+    <!-- Fish on Plate with Chopsticks -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="cuis-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Plate -->
+      <ellipse cx="32" cy="42" rx="26" ry="10" fill="var(--category-bg)" stroke="var(--category-color)" stroke-width="1.5" />
+      <ellipse cx="32" cy="40" rx="22" ry="8" fill="var(--color-bg-primary)" opacity="0.5" />
+      <!-- Steam wisps -->
+      <g class="steam" opacity="0.4">
+        <path d="M24 28 Q22 24 24 20 Q26 16 24 12" stroke="var(--category-color)" stroke-width="1.5" fill="none" class="steam-1" />
+        <path d="M32 26 Q30 22 32 18 Q34 14 32 10" stroke="var(--category-color)" stroke-width="1.5" fill="none" class="steam-2" />
+        <path d="M40 28 Q38 24 40 20 Q42 16 40 12" stroke="var(--category-color)" stroke-width="1.5" fill="none" class="steam-3" />
+      </g>
+      <!-- Fish body -->
+      <ellipse cx="32" cy="38" rx="16" ry="7" fill="url(#cuis-grad)" />
+      <!-- Fish tail -->
+      <path d="M48 38 L58 32 L58 44 Z" fill="url(#cuis-grad)" />
+      <!-- Fish head detail -->
+      <circle cx="20" cy="36" r="2" fill="var(--color-bg-primary)" />
+      <circle cx="20" cy="36" r="1" fill="#2c1810" />
+      <!-- Fish scales pattern -->
+      <g stroke="var(--category-color-muted)" stroke-width="0.5" fill="none" opacity="0.4">
+        <path d="M26 36 Q28 38 30 36" />
+        <path d="M32 36 Q34 38 36 36" />
+        <path d="M38 36 Q40 38 42 36" />
+        <path d="M28 40 Q30 42 32 40" />
+        <path d="M34 40 Q36 42 38 40" />
+      </g>
+      <!-- Chopsticks -->
+      <line x1="6" y1="8" x2="28" y2="48" stroke="#8b4513" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="12" y1="6" x2="34" y2="46" stroke="#8b4513" stroke-width="2.5" stroke-linecap="round" />
+      <!-- Decorative bowl -->
+      <path d="M50 52 Q54 56 58 52 L56 60 L52 60 Z" fill="var(--category-color)" opacity="0.6" />
+    </svg>
+  )}
+
+  {category === "culture" && (
+    <!-- Traditional Fan with Brush Strokes -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="cult-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Fan shape -->
+      <path d="M32 58 L6 20 Q32 2 58 20 Z" fill="var(--category-bg)" stroke="var(--category-color)" stroke-width="1.5" />
+      <!-- Fan ribs -->
+      <g stroke="var(--category-color)" stroke-width="0.8" opacity="0.5">
+        <line x1="32" y1="58" x2="14" y2="24" />
+        <line x1="32" y1="58" x2="20" y2="18" />
+        <line x1="32" y1="58" x2="26" y2="14" />
+        <line x1="32" y1="58" x2="32" y2="12" />
+        <line x1="32" y1="58" x2="38" y2="14" />
+        <line x1="32" y1="58" x2="44" y2="18" />
+        <line x1="32" y1="58" x2="50" y2="24" />
+      </g>
+      <!-- Decorative painting - cherry blossom -->
+      <g class="blossom" fill="url(#cult-grad)">
+        <circle cx="24" cy="28" r="3" opacity="0.8" />
+        <circle cx="30" cy="24" r="2.5" opacity="0.9" />
+        <circle cx="36" cy="26" r="3" opacity="0.7" />
+        <circle cx="28" cy="34" r="2" opacity="0.6" />
+        <circle cx="38" cy="32" r="2.5" opacity="0.8" />
+      </g>
+      <!-- Branch -->
+      <path d="M18 36 Q28 30 42 24" stroke="var(--category-color-muted)" stroke-width="1.5" fill="none" />
+      <!-- Handle -->
+      <rect x="29" y="56" width="6" height="8" rx="1" fill="url(#cult-grad)" />
+      <!-- Decorative tassel -->
+      <circle cx="32" cy="62" r="2" fill="var(--category-color)" />
+      <line x1="32" y1="62" x2="28" y2="64" stroke="var(--category-color)" stroke-width="1" />
+      <line x1="32" y1="62" x2="32" y2="64" stroke="var(--category-color)" stroke-width="1" />
+      <line x1="32" y1="62" x2="36" y2="64" stroke="var(--category-color)" stroke-width="1" />
+    </svg>
+  )}
+
+  {category === "factions" && (
+    <!-- Guild Banner with Paw Mon -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="fact-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Banner pole -->
+      <rect x="30" y="2" width="4" height="60" fill="#8b4513" rx="1" />
+      <circle cx="32" cy="4" r="3" fill="url(#fact-grad)" />
+      <!-- Banner fabric -->
+      <path d="M34 10 L54 14 Q58 32 54 50 L34 54 Z" fill="url(#fact-grad)" class="banner" />
+      <path d="M34 10 L54 14 Q56 16 54 18 L34 14 Z" fill="var(--category-color)" opacity="0.3" />
+      <!-- Paw print mon (family crest) -->
+      <g transform="translate(36, 24)" fill="var(--color-bg-primary)">
+        <!-- Main pad -->
+        <ellipse cx="8" cy="12" rx="6" ry="5" />
+        <!-- Toe beans -->
+        <ellipse cx="3" cy="5" rx="2.5" ry="3" />
+        <ellipse cx="8" cy="3" rx="2.5" ry="2.5" />
+        <ellipse cx="13" cy="5" rx="2.5" ry="3" />
+      </g>
+      <!-- Decorative tassels -->
+      <g fill="url(#fact-grad)">
+        <path d="M54 50 L58 56 L56 50 Z" />
+        <path d="M48 52 L52 60 L50 52 Z" />
+        <path d="M42 53 L44 62 L42 53 Z" />
+      </g>
+      <!-- Secondary banner hint -->
+      <path d="M28 12 L12 16 Q8 28 12 42 L28 46" fill="none" stroke="var(--category-color)" stroke-width="1" opacity="0.3" />
+    </svg>
+  )}
+
+  {category === "flora" && (
+    <!-- Bamboo with Cherry Blossoms and Glow Mushroom -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="flora-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Bamboo stalks -->
+      <g fill="url(#flora-grad)">
+        <rect x="12" y="8" width="6" height="52" rx="2" />
+        <rect x="12" y="18" width="6" height="2" fill="var(--category-color-muted)" />
+        <rect x="12" y="32" width="6" height="2" fill="var(--category-color-muted)" />
+        <rect x="12" y="46" width="6" height="2" fill="var(--category-color-muted)" />
+        
+        <rect x="24" y="16" width="5" height="44" rx="2" opacity="0.8" />
+        <rect x="24" y="28" width="5" height="1.5" fill="var(--category-color-muted)" />
+        <rect x="24" y="42" width="5" height="1.5" fill="var(--category-color-muted)" />
+      </g>
+      <!-- Bamboo leaves -->
+      <g fill="var(--category-color)" opacity="0.7">
+        <path d="M18 12 Q26 8 32 14 Q24 14 18 12" />
+        <path d="M18 24 Q28 20 36 26 Q26 28 18 24" />
+        <path d="M10 30 Q4 24 2 32 Q6 30 10 30" />
+      </g>
+      <!-- Cherry blossom branch -->
+      <path d="M40 8 Q48 16 56 12 Q52 24 58 32" stroke="#8b4513" stroke-width="2" fill="none" />
+      <!-- Blossoms -->
+      <g class="blossoms">
+        <circle cx="44" cy="12" r="4" fill="#ffb7c5" class="bloom bloom-1" />
+        <circle cx="52" cy="18" r="3" fill="#ffb7c5" class="bloom bloom-2" />
+        <circle cx="56" cy="28" r="3.5" fill="#ffb7c5" class="bloom bloom-3" />
+        <circle cx="44" cy="12" r="1.5" fill="#fff5f5" />
+        <circle cx="52" cy="18" r="1" fill="#fff5f5" />
+        <circle cx="56" cy="28" r="1.2" fill="#fff5f5" />
+      </g>
+      <!-- Glow mushroom (Yūrei-kinoko inspired) -->
+      <g class="mushroom">
+        <ellipse cx="48" cy="54" rx="8" ry="4" fill="url(#flora-grad)" opacity="0.6" />
+        <path d="M48 54 L48 46" stroke="var(--category-color)" stroke-width="3" />
+        <ellipse cx="48" cy="44" rx="7" ry="5" fill="var(--category-color)" />
+        <ellipse cx="48" cy="43" rx="5" ry="3" fill="var(--color-bg-primary)" opacity="0.4" class="glow" />
+      </g>
+    </svg>
+  )}
+
+  {category === "general" && (
+    <!-- Scroll with Paw Seal -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="gen-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Scroll body -->
+      <rect x="12" y="12" width="40" height="44" rx="2" fill="#f5f0e6" stroke="var(--category-color)" stroke-width="1" />
+      <!-- Scroll rolls -->
+      <ellipse cx="12" cy="34" rx="4" ry="24" fill="url(#gen-grad)" />
+      <ellipse cx="52" cy="34" rx="4" ry="24" fill="url(#gen-grad)" />
+      <!-- Text lines -->
+      <g stroke="var(--category-color-muted)" stroke-width="1" opacity="0.4">
+        <line x1="20" y1="20" x2="44" y2="20" />
+        <line x1="20" y1="26" x2="40" y2="26" />
+        <line x1="20" y1="32" x2="44" y2="32" />
+        <line x1="20" y1="38" x2="38" y2="38" />
+      </g>
+      <!-- Paw seal -->
+      <g transform="translate(26, 42)">
+        <rect x="-2" y="-2" width="16" height="16" fill="#c0392b" rx="2" opacity="0.9" />
+        <!-- Paw print -->
+        <g fill="#f5f0e6">
+          <ellipse cx="6" cy="9" rx="4" ry="3" />
+          <ellipse cx="2" cy="4" rx="1.8" ry="2.2" />
+          <ellipse cx="6" cy="2.5" rx="1.8" ry="1.8" />
+          <ellipse cx="10" cy="4" rx="1.8" ry="2.2" />
+        </g>
+      </g>
+      <!-- Ribbon -->
+      <path d="M30 8 Q32 4 34 8 L36 10 L28 10 Z" fill="url(#gen-grad)" />
+    </svg>
+  )}
+
+  {category === "history" && (
+    <!-- Hourglass with Gears -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="hist-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Frame top and bottom -->
+      <rect x="14" y="4" width="36" height="6" rx="2" fill="url(#hist-grad)" />
+      <rect x="14" y="54" width="36" height="6" rx="2" fill="url(#hist-grad)" />
+      <!-- Decorative caps -->
+      <rect x="18" y="2" width="28" height="2" rx="1" fill="var(--category-color)" opacity="0.6" />
+      <rect x="18" y="60" width="28" height="2" rx="1" fill="var(--category-color)" opacity="0.6" />
+      <!-- Glass bulbs -->
+      <path d="M20 10 Q20 28 32 32 Q44 28 44 10" fill="var(--category-bg)" stroke="var(--category-color)" stroke-width="1" />
+      <path d="M20 54 Q20 36 32 32 Q44 36 44 54" fill="var(--category-bg)" stroke="var(--category-color)" stroke-width="1" />
+      <!-- Sand in top -->
+      <path d="M24 14 Q24 24 32 28 Q38 26 38 18 Q36 14 32 14 Z" fill="var(--category-color)" opacity="0.5" class="sand-top" />
+      <!-- Sand falling -->
+      <line x1="32" y1="32" x2="32" y2="38" stroke="var(--category-color)" stroke-width="2" opacity="0.6" class="sand-stream" />
+      <!-- Sand in bottom -->
+      <path d="M26 52 Q26 46 32 42 Q38 46 38 52 Z" fill="var(--category-color)" opacity="0.7" class="sand-bottom" />
+      <!-- Decorative gears -->
+      <g class="gears">
+        <circle cx="8" cy="20" r="6" fill="none" stroke="var(--category-color)" stroke-width="1.5" opacity="0.4" />
+        <circle cx="8" cy="20" r="2" fill="var(--category-color)" opacity="0.4" />
+        <circle cx="56" cy="44" r="5" fill="none" stroke="var(--category-color)" stroke-width="1.5" opacity="0.4" />
+        <circle cx="56" cy="44" r="1.5" fill="var(--category-color)" opacity="0.4" />
+      </g>
+      <!-- Era markings -->
+      <g font-size="4" fill="var(--category-color)" opacity="0.5" font-family="serif">
+        <text x="10" y="36">古</text>
+        <text x="50" y="36">今</text>
+      </g>
+    </svg>
+  )}
+
+  {category === "locations" && (
+    <!-- Map with Cat Territory Markers -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="loc-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Map background -->
+      <rect x="6" y="8" width="52" height="48" rx="3" fill="#f5f0e6" stroke="var(--category-color)" stroke-width="1.5" />
+      <!-- Map fold lines -->
+      <line x1="6" y1="24" x2="58" y2="24" stroke="var(--category-color)" stroke-width="0.5" opacity="0.2" />
+      <line x1="6" y1="40" x2="58" y2="40" stroke="var(--category-color)" stroke-width="0.5" opacity="0.2" />
+      <line x1="26" y1="8" x2="26" y2="56" stroke="var(--category-color)" stroke-width="0.5" opacity="0.2" />
+      <line x1="42" y1="8" x2="42" y2="56" stroke="var(--category-color)" stroke-width="0.5" opacity="0.2" />
+      <!-- Terrain features -->
+      <path d="M10 44 L18 30 L26 42 L34 28 L42 40 L50 32 L54 44" stroke="var(--category-color)" stroke-width="1.5" fill="none" opacity="0.3" />
+      <!-- Water -->
+      <path d="M12 48 Q20 52 28 48 Q36 44 44 48 Q52 52 56 48" stroke="#4a90a4" stroke-width="2" fill="none" opacity="0.4" />
+      <!-- Location markers (cat ears style) -->
+      <g fill="url(#loc-grad)">
+        <!-- Marker 1 -->
+        <g class="marker marker-1">
+          <path d="M20 22 L18 14 L20 18 L22 14 Z" />
+          <circle cx="20" cy="24" r="3" />
+        </g>
+        <!-- Marker 2 -->
+        <g class="marker marker-2">
+          <path d="M40 18 L38 10 L40 14 L42 10 Z" />
+          <circle cx="40" cy="20" r="3" />
+        </g>
+        <!-- Marker 3 -->
+        <g class="marker marker-3">
+          <path d="M32 38 L30 30 L32 34 L34 30 Z" />
+          <circle cx="32" cy="40" r="3" />
+        </g>
+      </g>
+      <!-- Compass rose -->
+      <g transform="translate(50, 14)">
+        <circle cx="0" cy="0" r="6" fill="var(--category-bg)" stroke="var(--category-color)" stroke-width="0.8" />
+        <path d="M0 -5 L1 0 L0 5 L-1 0 Z" fill="var(--category-color)" />
+        <path d="M-5 0 L0 1 L5 0 L0 -1 Z" fill="var(--category-color)" opacity="0.5" />
+      </g>
+    </svg>
+  )}
+
+  {category === "politics" && (
+    <!-- Shogunate Castle/Crown -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="pol-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Castle base -->
+      <rect x="8" y="44" width="48" height="16" fill="url(#pol-grad)" rx="2" />
+      <!-- Castle walls -->
+      <rect x="14" y="32" width="36" height="14" fill="url(#pol-grad)" />
+      <!-- Main tower -->
+      <rect x="24" y="18" width="16" height="16" fill="url(#pol-grad)" />
+      <!-- Roof -->
+      <path d="M22 20 L32 8 L42 20 Z" fill="var(--category-color)" />
+      <path d="M26 18 L32 12 L38 18" stroke="var(--category-color-muted)" stroke-width="1" fill="none" />
+      <!-- Side towers -->
+      <rect x="10" y="36" width="8" height="10" fill="var(--category-color)" opacity="0.8" />
+      <path d="M8 38 L14 30 L20 38 Z" fill="var(--category-color)" opacity="0.9" />
+      <rect x="46" y="36" width="8" height="10" fill="var(--category-color)" opacity="0.8" />
+      <path d="M44 38 L50 30 L56 38 Z" fill="var(--category-color)" opacity="0.9" />
+      <!-- Windows -->
+      <g fill="var(--color-bg-primary)" opacity="0.8">
+        <rect x="28" y="22" width="8" height="6" rx="1" />
+        <rect x="20" y="36" width="4" height="5" rx="1" />
+        <rect x="30" y="36" width="4" height="5" rx="1" />
+        <rect x="40" y="36" width="4" height="5" rx="1" />
+      </g>
+      <!-- Gate -->
+      <path d="M26 60 L26 50 Q32 46 38 50 L38 60" fill="var(--color-bg-primary)" opacity="0.8" />
+      <!-- Mon (crest) on gate -->
+      <circle cx="32" cy="52" r="3" fill="var(--category-color)" opacity="0.7" />
+      <!-- Decorative banners -->
+      <line x1="32" y1="8" x2="32" y2="2" stroke="var(--category-color)" stroke-width="1" />
+      <rect x="30" y="2" width="4" height="3" fill="var(--category-color)" opacity="0.8" />
+    </svg>
+  )}
+
+  {category === "professions" && (
+    <!-- Craftsman Tools with Paw -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="prof-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Workbench -->
+      <rect x="8" y="50" width="48" height="8" rx="2" fill="#8b4513" />
+      <rect x="12" y="52" width="40" height="2" fill="#a0522d" />
+      <!-- Hammer -->
+      <g class="tool-hammer">
+        <rect x="14" y="20" width="6" height="28" rx="1" fill="#8b4513" />
+        <rect x="10" y="14" width="14" height="10" rx="2" fill="url(#prof-grad)" />
+      </g>
+      <!-- Gear/Cog -->
+      <g class="tool-gear" transform="translate(32, 30)">
+        <circle cx="0" cy="0" r="10" fill="none" stroke="url(#prof-grad)" stroke-width="4" />
+        <circle cx="0" cy="0" r="4" fill="url(#prof-grad)" />
+        <g fill="url(#prof-grad)">
+          <rect x="-2" y="-14" width="4" height="6" rx="1" />
+          <rect x="-2" y="8" width="4" height="6" rx="1" />
+          <rect x="-14" y="-2" width="6" height="4" rx="1" />
+          <rect x="8" y="-2" width="6" height="4" rx="1" />
+        </g>
+      </g>
+      <!-- Chisel -->
+      <g class="tool-chisel">
+        <rect x="48" y="22" width="4" height="24" rx="1" fill="#8b4513" />
+        <path d="M46 46 L50 46 L52 50 L44 50 Z" fill="var(--category-color)" />
+      </g>
+      <!-- Paw holding tool -->
+      <g transform="translate(20, 42)" fill="var(--category-color)" opacity="0.8">
+        <ellipse cx="8" cy="6" rx="7" ry="5" />
+        <ellipse cx="2" cy="0" rx="2.5" ry="3" />
+        <ellipse cx="8" cy="-2" rx="2.5" ry="2.5" />
+        <ellipse cx="14" cy="0" rx="2.5" ry="3" />
+      </g>
+      <!-- Spark effects -->
+      <g class="sparks" fill="var(--category-color)" opacity="0.6">
+        <circle cx="24" cy="12" r="1" class="spark spark-1" />
+        <circle cx="28" cy="8" r="0.8" class="spark spark-2" />
+        <circle cx="20" cy="16" r="0.6" class="spark spark-3" />
+      </g>
+    </svg>
+  )}
+
+  {category === "society" && (
+    <!-- Multiple Cat Silhouettes in Community -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="soc-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Background circle (community) -->
+      <circle cx="32" cy="32" r="28" fill="var(--category-bg)" opacity="0.5" />
+      <!-- Central cat (larger) -->
+      <g class="cat-center" transform="translate(24, 20)">
+        <ellipse cx="8" cy="20" rx="8" ry="6" fill="url(#soc-grad)" />
+        <ellipse cx="8" cy="12" rx="6" ry="5" fill="url(#soc-grad)" />
+        <path d="M3 10 L1 4 L5 8 Z" fill="url(#soc-grad)" />
+        <path d="M13 10 L15 4 L11 8 Z" fill="url(#soc-grad)" />
+        <circle cx="6" cy="11" r="1" fill="var(--color-bg-primary)" />
+        <circle cx="10" cy="11" r="1" fill="var(--color-bg-primary)" />
+      </g>
+      <!-- Left cat (smaller) -->
+      <g class="cat-left" transform="translate(6, 30)">
+        <ellipse cx="6" cy="14" rx="6" ry="5" fill="var(--category-color)" opacity="0.7" />
+        <ellipse cx="6" cy="8" rx="5" ry="4" fill="var(--category-color)" opacity="0.7" />
+        <path d="M2 6 L0 1 L4 5 Z" fill="var(--category-color)" opacity="0.7" />
+        <path d="M10 6 L12 1 L8 5 Z" fill="var(--category-color)" opacity="0.7" />
+      </g>
+      <!-- Right cat (smaller) -->
+      <g class="cat-right" transform="translate(44, 28)">
+        <ellipse cx="6" cy="14" rx="6" ry="5" fill="var(--category-color)" opacity="0.7" />
+        <ellipse cx="6" cy="8" rx="5" ry="4" fill="var(--category-color)" opacity="0.7" />
+        <path d="M2 6 L0 1 L4 5 Z" fill="var(--category-color)" opacity="0.7" />
+        <path d="M10 6 L12 1 L8 5 Z" fill="var(--category-color)" opacity="0.7" />
+      </g>
+      <!-- Bottom cat -->
+      <g class="cat-bottom" transform="translate(22, 44)">
+        <ellipse cx="6" cy="10" rx="5" ry="4" fill="var(--category-color)" opacity="0.5" />
+        <ellipse cx="6" cy="5" rx="4" ry="3" fill="var(--category-color)" opacity="0.5" />
+        <path d="M3 4 L1 0 L4 3 Z" fill="var(--category-color)" opacity="0.5" />
+        <path d="M9 4 L11 0 L8 3 Z" fill="var(--category-color)" opacity="0.5" />
+      </g>
+      <!-- Connection lines (social bonds) -->
+      <g stroke="var(--category-color)" stroke-width="1" opacity="0.3" stroke-dasharray="2,2">
+        <line x1="32" y1="32" x2="14" y2="40" />
+        <line x1="32" y1="32" x2="50" y2="38" />
+        <line x1="32" y1="32" x2="32" y2="52" />
+      </g>
+    </svg>
+  )}
+
+  {category === "technology" && (
+    <!-- Gears and Steam Pipes -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="tech-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Main large gear -->
+      <g class="gear-main" transform="translate(32, 28)">
+        <circle cx="0" cy="0" r="18" fill="none" stroke="url(#tech-grad)" stroke-width="5" />
+        <circle cx="0" cy="0" r="6" fill="url(#tech-grad)" />
+        <!-- Gear teeth -->
+        <g fill="url(#tech-grad)">
+          <rect x="-3" y="-24" width="6" height="8" rx="1" />
+          <rect x="-3" y="16" width="6" height="8" rx="1" />
+          <rect x="-24" y="-3" width="8" height="6" rx="1" />
+          <rect x="16" y="-3" width="8" height="6" rx="1" />
+          <rect x="11" y="-18" width="6" height="8" rx="1" transform="rotate(45 14 -14)" />
+          <rect x="-17" y="-18" width="6" height="8" rx="1" transform="rotate(-45 -14 -14)" />
+          <rect x="11" y="10" width="6" height="8" rx="1" transform="rotate(-45 14 14)" />
+          <rect x="-17" y="10" width="6" height="8" rx="1" transform="rotate(45 -14 14)" />
+        </g>
+      </g>
+      <!-- Small gear (interlocking) -->
+      <g class="gear-small" transform="translate(12, 50)">
+        <circle cx="0" cy="0" r="8" fill="none" stroke="var(--category-color)" stroke-width="3" opacity="0.8" />
+        <circle cx="0" cy="0" r="3" fill="var(--category-color)" opacity="0.8" />
+        <g fill="var(--category-color)" opacity="0.8">
+          <rect x="-2" y="-12" width="4" height="5" rx="1" />
+          <rect x="-2" y="7" width="4" height="5" rx="1" />
+          <rect x="-12" y="-2" width="5" height="4" rx="1" />
+          <rect x="7" y="-2" width="5" height="4" rx="1" />
+        </g>
+      </g>
+      <!-- Steam pipes -->
+      <g stroke="var(--category-color)" stroke-width="4" fill="none" opacity="0.6">
+        <path d="M54 8 L54 20 Q54 26 48 26 L44 26" stroke-linecap="round" />
+        <path d="M8 8 L8 16 Q8 22 14 22" stroke-linecap="round" />
+      </g>
+      <!-- Pipe joints -->
+      <circle cx="54" cy="8" r="3" fill="var(--category-color)" opacity="0.8" />
+      <circle cx="8" cy="8" r="3" fill="var(--category-color)" opacity="0.8" />
+      <!-- Steam puffs -->
+      <g class="steam-puffs" fill="var(--category-color)" opacity="0.3">
+        <circle cx="56" cy="4" r="2" class="puff puff-1" />
+        <circle cx="60" cy="2" r="1.5" class="puff puff-2" />
+        <circle cx="10" cy="4" r="2" class="puff puff-3" />
+      </g>
+      <!-- Gauge -->
+      <g transform="translate(52, 50)">
+        <circle cx="0" cy="0" r="6" fill="var(--category-bg)" stroke="var(--category-color)" stroke-width="1" />
+        <path d="M0 0 L0 -4" stroke="var(--category-color)" stroke-width="1.5" stroke-linecap="round" transform="rotate(45)" />
+        <circle cx="0" cy="0" r="1.5" fill="var(--category-color)" />
+      </g>
+    </svg>
+  )}
+
+  {category === "world" && (
+    <!-- Globe with Cat Ears -->
+    <svg viewBox="0 0 64 64" class="category-icon__svg">
+      <defs>
+        <linearGradient id="world-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="var(--category-color)" />
+          <stop offset="100%" stop-color="var(--category-color-muted)" />
+        </linearGradient>
+      </defs>
+      <!-- Cat ears on top of globe -->
+      <path d="M18 16 L12 4 L22 12 Z" fill="url(#world-grad)" class="ear-left" />
+      <path d="M46 16 L52 4 L42 12 Z" fill="url(#world-grad)" class="ear-right" />
+      <path d="M18 14 L14 6 L20 12 Z" fill="#ffb6c1" opacity="0.5" />
+      <path d="M46 14 L50 6 L44 12 Z" fill="#ffb6c1" opacity="0.5" />
+      <!-- Globe -->
+      <circle cx="32" cy="34" r="22" fill="var(--category-bg)" stroke="url(#world-grad)" stroke-width="2" />
+      <!-- Latitude/Longitude lines -->
+      <g stroke="var(--category-color)" stroke-width="0.8" fill="none" opacity="0.3">
+        <ellipse cx="32" cy="34" rx="22" ry="8" />
+        <ellipse cx="32" cy="34" rx="22" ry="16" />
+        <ellipse cx="32" cy="34" rx="8" ry="22" />
+        <line x1="10" y1="34" x2="54" y2="34" />
+      </g>
+      <!-- Continents (stylized) -->
+      <g fill="url(#world-grad)" opacity="0.7">
+        <path d="M20 28 Q24 24 30 26 Q34 30 28 36 Q22 34 20 28" />
+        <path d="M38 26 Q44 24 48 30 Q46 38 40 36 Q36 32 38 26" />
+        <path d="M26 40 Q32 38 38 42 Q36 48 30 46 Q24 44 26 40" />
+      </g>
+      <!-- Stand -->
+      <path d="M26 56 L32 52 L38 56" stroke="url(#world-grad)" stroke-width="2" fill="none" />
+      <ellipse cx="32" cy="58" rx="10" ry="3" fill="var(--category-bg)" stroke="var(--category-color)" stroke-width="1" />
+      <!-- Arc (like a globe stand arm) -->
+      <path d="M14 16 Q6 34 14 52" stroke="var(--category-color)" stroke-width="2" fill="none" opacity="0.6" />
+      <!-- Cat face features on globe (subtle) -->
+      <g opacity="0.2">
+        <ellipse cx="26" cy="32" rx="2" ry="2.5" fill="var(--category-color)" />
+        <ellipse cx="38" cy="32" rx="2" ry="2.5" fill="var(--category-color)" />
+        <path d="M32 36 L30 38 L34 38 Z" fill="var(--category-color)" />
+      </g>
+    </svg>
+  )}
+</div>
+
+<style>
+  .category-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .category-icon__svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     ANIMATIONS
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* Architecture - roof float */
+  .category-icon--animate .roof {
+    animation: roof-float 3s ease-in-out infinite;
+  }
+  .roof-2 { animation-delay: 0.1s !important; }
+  .roof-3 { animation-delay: 0.2s !important; }
+
+  @keyframes roof-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-1px); }
+  }
+
+  /* Characters - blink */
+  .category-icon--animate .pupil {
+    animation: pupil-look 4s ease-in-out infinite;
+  }
+
+  @keyframes pupil-look {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(1px); }
+    75% { transform: translateX(-1px); }
+  }
+
+  /* Cuisine - steam rise */
+  .category-icon--animate .steam path {
+    animation: steam-rise 2s ease-out infinite;
+  }
+  .steam-2 { animation-delay: 0.3s !important; }
+  .steam-3 { animation-delay: 0.6s !important; }
+
+  @keyframes steam-rise {
+    0% { opacity: 0; transform: translateY(0); }
+    50% { opacity: 0.4; }
+    100% { opacity: 0; transform: translateY(-8px); }
+  }
+
+  /* Culture - blossom pulse */
+  .category-icon--animate .blossom circle {
+    animation: blossom-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes blossom-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+
+  /* Factions - banner wave */
+  .category-icon--animate .banner {
+    animation: banner-wave 3s ease-in-out infinite;
+    transform-origin: left center;
+  }
+
+  @keyframes banner-wave {
+    0%, 100% { transform: skewY(0deg); }
+    50% { transform: skewY(2deg); }
+  }
+
+  /* Flora - glow */
+  .category-icon--animate .glow {
+    animation: mushroom-glow 2s ease-in-out infinite;
+  }
+  .category-icon--animate .bloom {
+    animation: bloom-sway 3s ease-in-out infinite;
+  }
+
+  @keyframes mushroom-glow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  @keyframes bloom-sway {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(1px); }
+  }
+
+  /* History - sand flow */
+  .category-icon--animate .sand-stream {
+    animation: sand-flow 1s linear infinite;
+  }
+
+  @keyframes sand-flow {
+    0% { stroke-dasharray: 2, 4; stroke-dashoffset: 0; }
+    100% { stroke-dasharray: 2, 4; stroke-dashoffset: -6; }
+  }
+
+  /* Locations - marker bounce */
+  .category-icon--animate .marker {
+    animation: marker-bounce 2s ease-in-out infinite;
+  }
+  .marker-2 { animation-delay: 0.3s !important; }
+  .marker-3 { animation-delay: 0.6s !important; }
+
+  @keyframes marker-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+
+  /* Professions - sparks */
+  .category-icon--animate .spark {
+    animation: spark-flash 1.5s ease-out infinite;
+  }
+  .spark-2 { animation-delay: 0.3s !important; }
+  .spark-3 { animation-delay: 0.6s !important; }
+
+  @keyframes spark-flash {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 0.8; transform: scale(1); }
+  }
+
+  /* Technology - gear spin */
+  .category-icon--animate .gear-main {
+    animation: gear-spin-slow 8s linear infinite;
+  }
+  .category-icon--animate .gear-small {
+    animation: gear-spin-slow 5s linear infinite reverse;
+  }
+  .category-icon--animate .puff {
+    animation: puff-rise 2s ease-out infinite;
+  }
+
+  @keyframes gear-spin-slow {
+    from { transform: translate(32px, 28px) rotate(0deg); }
+    to { transform: translate(32px, 28px) rotate(360deg); }
+  }
+
+  @keyframes puff-rise {
+    0% { opacity: 0.3; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-6px) scale(1.5); }
+  }
+
+  /* World - rotate */
+  .category-icon--animate .ear-left,
+  .category-icon--animate .ear-right {
+    animation: ear-twitch 3s ease-in-out infinite;
+  }
+
+  @keyframes ear-twitch {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     REDUCED MOTION
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .category-icon--animate * {
+      animation: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,972 @@
+---
+/**
+ * MenuCat.astro
+ * An adorable interactive cat mascot that lives in the navigation
+ * Features: Eye tracking, idle animations, menu interactions, playful behaviors
+ * Now with actual toys to play with!
+ */
+---
+
+<div class="menu-cat-container" id="menu-cat-container" aria-hidden="true">
+  <!-- Floating Toys -->
+  <div class="toys">
+    <!-- Yarn Ball -->
+    <div class="toy toy--yarn" id="toy-yarn">
+      <svg viewBox="0 0 24 24" width="18" height="18">
+        <circle cx="12" cy="12" r="10" fill="#e74c3c" />
+        <path d="M6 10 Q12 6 18 10 M8 14 Q12 18 16 14 M10 8 Q12 12 14 8" stroke="#c0392b" stroke-width="1.5" fill="none" />
+        <path d="M12 2 Q8 4 12 8 Q16 12 12 16" stroke="#e74c3c" stroke-width="2" fill="none" opacity="0.5" />
+      </svg>
+    </div>
+    
+    <!-- Fish Toy -->
+    <div class="toy toy--fish" id="toy-fish">
+      <svg viewBox="0 0 28 16" width="22" height="14">
+        <ellipse cx="10" cy="8" rx="9" ry="6" fill="#3498db" />
+        <path d="M19 8 L28 2 L28 14 Z" fill="#3498db" />
+        <circle cx="5" cy="7" r="1.5" fill="white" />
+        <circle cx="5" cy="7" r="0.8" fill="#2c3e50" />
+        <path d="M8 10 Q10 8 12 10 M13 7 Q15 5 17 7" stroke="#2980b9" stroke-width="0.8" fill="none" opacity="0.5" />
+      </svg>
+    </div>
+    
+    <!-- Feather Toy -->
+    <div class="toy toy--feather" id="toy-feather">
+      <svg viewBox="0 0 20 32" width="14" height="24">
+        <path d="M10 0 L10 28" stroke="#8b4513" stroke-width="1.5" />
+        <path d="M10 4 Q2 8 4 16 Q6 20 10 18" fill="#9b59b6" opacity="0.9" />
+        <path d="M10 4 Q18 8 16 16 Q14 20 10 18" fill="#8e44ad" opacity="0.9" />
+        <path d="M10 8 Q5 10 6 14" stroke="#7d3c98" stroke-width="0.5" fill="none" />
+        <path d="M10 8 Q15 10 14 14" stroke="#7d3c98" stroke-width="0.5" fill="none" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- The Cat -->
+  <div class="menu-cat" id="menu-cat">
+    <svg class="menu-cat__svg" viewBox="0 0 80 60" preserveAspectRatio="xMidYMid meet">
+    <!-- Cat Body -->
+    <g class="cat-body">
+      <!-- Back/Body -->
+      <ellipse cx="40" cy="42" rx="22" ry="14" fill="var(--cat-fur)" class="body" />
+      
+      <!-- Tail -->
+      <path 
+        class="tail" 
+        d="M60 42 Q75 38 72 28 Q70 22 65 25" 
+        stroke="var(--cat-fur)" 
+        stroke-width="6" 
+        stroke-linecap="round" 
+        fill="none"
+      />
+      <path 
+        class="tail-tip" 
+        d="M65 25 Q62 20 58 22" 
+        stroke="var(--cat-tail-tip)" 
+        stroke-width="6" 
+        stroke-linecap="round" 
+        fill="none"
+      />
+      
+      <!-- Front Paws -->
+      <ellipse cx="28" cy="52" rx="6" ry="4" fill="var(--cat-fur)" class="paw paw-left" />
+      <ellipse cx="52" cy="52" rx="6" ry="4" fill="var(--cat-fur)" class="paw paw-right" />
+    </g>
+
+    <!-- Cat Head -->
+    <g class="cat-head">
+      <!-- Head Base -->
+      <ellipse cx="40" cy="28" rx="18" ry="16" fill="var(--cat-fur)" />
+      
+      <!-- Ears -->
+      <path class="ear ear-left" d="M24 18 L22 4 L32 14 Z" fill="var(--cat-fur)" />
+      <path class="ear ear-right" d="M56 18 L58 4 L48 14 Z" fill="var(--cat-fur)" />
+      <path class="ear-inner ear-inner-left" d="M25 16 L24 7 L30 14 Z" fill="var(--cat-ear-inner)" />
+      <path class="ear-inner ear-inner-right" d="M55 16 L56 7 L50 14 Z" fill="var(--cat-ear-inner)" />
+      
+      <!-- Face Markings (optional tabby stripes) -->
+      <path class="face-marking" d="M40 18 L40 24" stroke="var(--cat-markings)" stroke-width="2" stroke-linecap="round" opacity="0.3" />
+      
+      <!-- Eyes -->
+      <g class="eyes">
+        <!-- Left Eye -->
+        <g class="eye eye-left">
+          <ellipse class="eye-white" cx="33" cy="26" rx="5" ry="5.5" fill="white" />
+          <ellipse class="pupil pupil-left" cx="33" cy="26" rx="2.5" ry="3.5" fill="var(--cat-eyes)" />
+          <circle class="eye-highlight" cx="34.5" cy="24.5" r="1" fill="white" />
+        </g>
+        <!-- Right Eye -->
+        <g class="eye eye-right">
+          <ellipse class="eye-white" cx="47" cy="26" rx="5" ry="5.5" fill="white" />
+          <ellipse class="pupil pupil-right" cx="47" cy="26" rx="2.5" ry="3.5" fill="var(--cat-eyes)" />
+          <circle class="eye-highlight" cx="48.5" cy="24.5" r="1" fill="white" />
+        </g>
+        <!-- Closed Eyes (for blinking) -->
+        <path class="eye-closed eye-closed-left" d="M28 26 Q33 28 38 26" stroke="var(--cat-eyes)" stroke-width="2" stroke-linecap="round" fill="none" style="display: none;" />
+        <path class="eye-closed eye-closed-right" d="M42 26 Q47 28 52 26" stroke="var(--cat-eyes)" stroke-width="2" stroke-linecap="round" fill="none" style="display: none;" />
+      </g>
+      
+      <!-- Nose -->
+      <path class="nose" d="M40 32 L38 35 L42 35 Z" fill="var(--cat-nose)" />
+      
+      <!-- Mouth -->
+      <g class="mouth">
+        <path class="mouth-line" d="M40 35 L40 37" stroke="var(--cat-nose)" stroke-width="1" stroke-linecap="round" />
+        <path class="mouth-curve" d="M36 38 Q40 40 44 38" stroke="var(--cat-nose)" stroke-width="1" fill="none" stroke-linecap="round" />
+      </g>
+      
+      <!-- Whiskers -->
+      <g class="whiskers" stroke="var(--cat-whiskers)" stroke-width="0.8" stroke-linecap="round">
+        <line class="whisker" x1="26" y1="32" x2="14" y2="30" />
+        <line class="whisker" x1="26" y1="35" x2="13" y2="36" />
+        <line class="whisker" x1="26" y1="38" x2="14" y2="42" />
+        <line class="whisker" x1="54" y1="32" x2="66" y2="30" />
+        <line class="whisker" x1="54" y1="35" x2="67" y2="36" />
+        <line class="whisker" x1="54" y1="38" x2="66" y2="42" />
+      </g>
+    </g>
+    
+    <!-- Interactive Elements -->
+    <g class="interaction-elements" style="display: none;">
+      <!-- Yarn Ball -->
+      <g class="yarn-ball">
+        <circle cx="15" cy="50" r="6" fill="#e74c3c" />
+        <path d="M10 48 Q15 52 20 48 M12 52 Q15 48 18 52" stroke="#c0392b" stroke-width="1" fill="none" />
+      </g>
+      <!-- Fish -->
+      <g class="fish">
+        <ellipse cx="70" cy="35" rx="8" ry="4" fill="#3498db" />
+        <path d="M78 35 L84 30 L84 40 Z" fill="#3498db" />
+        <circle cx="65" cy="34" r="1" fill="white" />
+      </g>
+      <!-- Sparkles when happy -->
+      <g class="sparkles">
+        <path d="M15 15 L17 18 L20 15 L17 12 Z" fill="#f1c40f" class="sparkle sparkle-1" />
+        <path d="M60 10 L62 13 L65 10 L62 7 Z" fill="#f1c40f" class="sparkle sparkle-2" />
+        <circle cx="25" cy="8" r="2" fill="#f1c40f" class="sparkle sparkle-3" />
+      </g>
+    </g>
+    
+    <!-- Z's for sleeping -->
+    <g class="sleep-zs" style="display: none;">
+      <text x="55" y="15" font-size="8" fill="var(--color-text-tertiary)" class="z z-1">z</text>
+      <text x="60" y="10" font-size="10" fill="var(--color-text-tertiary)" class="z z-2">z</text>
+      <text x="67" y="5" font-size="12" fill="var(--color-text-tertiary)" class="z z-3">Z</text>
+    </g>
+  </svg>
+  
+    <!-- Speech Bubble (appears on special interactions) -->
+    <div class="menu-cat__bubble" id="cat-bubble">
+      <span class="menu-cat__message" id="cat-message">Nya~</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  class MenuCat {
+    private container: HTMLElement | null;
+    private cat: HTMLElement | null;
+    private leftPupil: SVGElement | null;
+    private rightPupil: SVGElement | null;
+    private leftEar: SVGElement | null;
+    private rightEar: SVGElement | null;
+    private tail: SVGElement | null;
+    private eyeLeft: SVGElement | null;
+    private eyeRight: SVGElement | null;
+    private eyeClosedLeft: SVGElement | null;
+    private eyeClosedRight: SVGElement | null;
+    private sleepZs: SVGElement | null;
+    private bubble: HTMLElement | null;
+    private message: HTMLElement | null;
+    private pawLeft: SVGElement | null;
+    private pawRight: SVGElement | null;
+    
+    // Toys
+    private toys: HTMLElement[] = [];
+    private activeToy: HTMLElement | null = null;
+    private toyYarn: HTMLElement | null;
+    private toyFish: HTMLElement | null;
+    private toyFeather: HTMLElement | null;
+    
+    private isNapping: boolean = false;
+    private isPlaying: boolean = false;
+    private lastInteraction: number = Date.now();
+    private blinkInterval: ReturnType<typeof setInterval> | null = null;
+    private idleCheckInterval: ReturnType<typeof setInterval> | null = null;
+    private playInterval: ReturnType<typeof setInterval> | null = null;
+    private toyAnimationFrame: number | null = null;
+    
+    constructor() {
+      this.container = document.getElementById('menu-cat-container');
+      this.cat = document.getElementById('menu-cat');
+      if (!this.cat) return;
+      
+      const svg = this.cat.querySelector('.menu-cat__svg');
+      if (!svg) return;
+      
+      this.leftPupil = svg.querySelector('.pupil-left');
+      this.rightPupil = svg.querySelector('.pupil-right');
+      this.leftEar = svg.querySelector('.ear-left');
+      this.rightEar = svg.querySelector('.ear-right');
+      this.tail = svg.querySelector('.tail');
+      this.eyeLeft = svg.querySelector('.eye-left');
+      this.eyeRight = svg.querySelector('.eye-right');
+      this.eyeClosedLeft = svg.querySelector('.eye-closed-left');
+      this.eyeClosedRight = svg.querySelector('.eye-closed-right');
+      this.sleepZs = svg.querySelector('.sleep-zs');
+      this.pawLeft = svg.querySelector('.paw-left');
+      this.pawRight = svg.querySelector('.paw-right');
+      this.bubble = document.getElementById('cat-bubble');
+      this.message = document.getElementById('cat-message');
+      
+      // Get toys
+      this.toyYarn = document.getElementById('toy-yarn');
+      this.toyFish = document.getElementById('toy-fish');
+      this.toyFeather = document.getElementById('toy-feather');
+      if (this.toyYarn) this.toys.push(this.toyYarn);
+      if (this.toyFish) this.toys.push(this.toyFish);
+      if (this.toyFeather) this.toys.push(this.toyFeather);
+      
+      this.init();
+    }
+    
+    private init(): void {
+      this.setupMouseTracking();
+      this.setupMenuInteractions();
+      this.setupToyInteractions();
+      this.startBlinking();
+      this.startIdleCheck();
+      this.startPlaySchedule();
+      this.setupClickInteraction();
+    }
+    
+    private setupMouseTracking(): void {
+      document.addEventListener('mousemove', (e) => {
+        if (this.isNapping) {
+          this.wakeUp();
+        }
+        this.trackMouse(e);
+        this.lastInteraction = Date.now();
+      });
+    }
+    
+    private trackMouse(e: MouseEvent): void {
+      if (!this.cat || !this.leftPupil || !this.rightPupil) return;
+      
+      const catRect = this.cat.getBoundingClientRect();
+      const catCenterX = catRect.left + catRect.width / 2;
+      const catCenterY = catRect.top + catRect.height / 2;
+      
+      const deltaX = e.clientX - catCenterX;
+      const deltaY = e.clientY - catCenterY;
+      
+      const maxOffset = 2;
+      const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+      const normalizedX = distance > 0 ? deltaX / distance : 0;
+      const normalizedY = distance > 0 ? deltaY / distance : 0;
+      
+      const offsetX = normalizedX * Math.min(maxOffset, distance / 50);
+      const offsetY = normalizedY * Math.min(maxOffset, distance / 80);
+      
+      this.leftPupil.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      this.rightPupil.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      
+      if (this.leftEar && this.rightEar) {
+        const earRotate = Math.max(-5, Math.min(5, deltaX / 100));
+        this.leftEar.style.transform = `rotate(${-earRotate}deg)`;
+        this.rightEar.style.transform = `rotate(${earRotate}deg)`;
+      }
+    }
+    
+    private setupToyInteractions(): void {
+      this.toys.forEach(toy => {
+        toy.addEventListener('mouseenter', () => this.onToyHover(toy));
+        toy.addEventListener('mouseleave', () => this.onToyLeave(toy));
+        toy.addEventListener('click', () => this.onToyClick(toy));
+      });
+    }
+    
+    private onToyHover(toy: HTMLElement): void {
+      if (!this.cat || this.isPlaying) return;
+      toy.classList.add('wiggle');
+      this.cat.classList.add('alert');
+      // Cat looks at toy
+      this.lookAtToy(toy);
+    }
+    
+    private onToyLeave(toy: HTMLElement): void {
+      if (!this.cat) return;
+      toy.classList.remove('wiggle');
+      this.cat.classList.remove('alert');
+    }
+    
+    private onToyClick(toy: HTMLElement): void {
+      if (this.isPlaying) return;
+      this.playWithToy(toy);
+    }
+    
+    private lookAtToy(toy: HTMLElement): void {
+      if (!this.cat || !this.leftPupil || !this.rightPupil) return;
+      
+      const catRect = this.cat.getBoundingClientRect();
+      const toyRect = toy.getBoundingClientRect();
+      
+      const deltaX = toyRect.left - catRect.left;
+      const deltaY = toyRect.top - catRect.top;
+      
+      const maxOffset = 2.5;
+      const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+      const normalizedX = distance > 0 ? deltaX / distance : 0;
+      const normalizedY = distance > 0 ? deltaY / distance : 0;
+      
+      const offsetX = normalizedX * maxOffset;
+      const offsetY = normalizedY * maxOffset;
+      
+      this.leftPupil.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      this.rightPupil.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+    }
+    
+    private playWithToy(toy: HTMLElement): void {
+      if (!this.cat || !this.container) return;
+      
+      this.isPlaying = true;
+      this.activeToy = toy;
+      this.cat.classList.add('playing');
+      toy.classList.add('active');
+      
+      // Different play animations based on toy type
+      if (toy.id === 'toy-yarn') {
+        this.playYarn(toy);
+      } else if (toy.id === 'toy-fish') {
+        this.playFish(toy);
+      } else if (toy.id === 'toy-feather') {
+        this.playFeather(toy);
+      }
+      
+      this.showBubble('!!');
+      this.lastInteraction = Date.now();
+    }
+    
+    private playYarn(toy: HTMLElement): void {
+      // Yarn rolls around, cat paws at it
+      let angle = 0;
+      const animate = () => {
+        angle += 5;
+        toy.style.transform = `translateX(${Math.sin(angle * 0.05) * 20}px) rotate(${angle}deg)`;
+        
+        if (angle < 720) {
+          this.toyAnimationFrame = requestAnimationFrame(animate);
+        } else {
+          this.endPlay(toy);
+        }
+      };
+      this.toyAnimationFrame = requestAnimationFrame(animate);
+      
+      // Cat paw animation
+      this.cat?.classList.add('pawing');
+      setTimeout(() => this.cat?.classList.remove('pawing'), 1500);
+    }
+    
+    private playFish(toy: HTMLElement): void {
+      // Fish flops, cat pounces
+      let frame = 0;
+      const animate = () => {
+        frame++;
+        const flop = Math.sin(frame * 0.3) * 15;
+        const jump = Math.abs(Math.sin(frame * 0.15)) * -10;
+        toy.style.transform = `translateY(${jump}px) rotate(${flop}deg)`;
+        
+        if (frame < 100) {
+          this.toyAnimationFrame = requestAnimationFrame(animate);
+        } else {
+          this.endPlay(toy);
+        }
+      };
+      this.toyAnimationFrame = requestAnimationFrame(animate);
+      
+      this.cat?.classList.add('pouncing');
+      setTimeout(() => this.cat?.classList.remove('pouncing'), 2000);
+    }
+    
+    private playFeather(toy: HTMLElement): void {
+      // Feather floats, cat jumps
+      let frame = 0;
+      const animate = () => {
+        frame++;
+        const sway = Math.sin(frame * 0.08) * 25;
+        const float = Math.sin(frame * 0.05) * 8;
+        toy.style.transform = `translateX(${sway}px) translateY(${float}px) rotate(${sway * 0.3}deg)`;
+        
+        if (frame < 120) {
+          this.toyAnimationFrame = requestAnimationFrame(animate);
+        } else {
+          this.endPlay(toy);
+        }
+      };
+      this.toyAnimationFrame = requestAnimationFrame(animate);
+      
+      this.cat?.classList.add('jumping');
+      setTimeout(() => this.cat?.classList.remove('jumping'), 2000);
+    }
+    
+    private endPlay(toy: HTMLElement): void {
+      this.isPlaying = false;
+      this.activeToy = null;
+      toy.classList.remove('active');
+      toy.style.transform = '';
+      this.cat?.classList.remove('playing', 'pawing', 'pouncing', 'jumping');
+      
+      // Happy after playing
+      this.showBubble('Purr~');
+    }
+    
+    private startPlaySchedule(): void {
+      // Occasionally show a toy and play with it automatically
+      this.playInterval = setInterval(() => {
+        if (this.isNapping || this.isPlaying) return;
+        
+        const idleTime = Date.now() - this.lastInteraction;
+        // After 8 seconds of idle, maybe show a toy
+        if (idleTime > 8000 && idleTime < 15000 && Math.random() > 0.7) {
+          this.autoPlay();
+        }
+      }, 5000);
+    }
+    
+    private autoPlay(): void {
+      if (this.toys.length === 0) return;
+      
+      const randomToy = this.toys[Math.floor(Math.random() * this.toys.length)];
+      randomToy.classList.add('appear');
+      
+      setTimeout(() => {
+        this.playWithToy(randomToy);
+        setTimeout(() => {
+          randomToy.classList.remove('appear');
+        }, 3000);
+      }, 500);
+    }
+    
+    private setupMenuInteractions(): void {
+      const navLinks = document.querySelectorAll('.header__nav-link, .header__mobile-link');
+      
+      navLinks.forEach((link) => {
+        link.addEventListener('mouseenter', () => {
+          this.onMenuHover(link as HTMLElement);
+        });
+        
+        link.addEventListener('mouseleave', () => {
+          this.onMenuLeave();
+        });
+      });
+    }
+    
+    private onMenuHover(link: HTMLElement): void {
+      if (!this.cat || !this.tail || this.isPlaying) return;
+      this.cat.classList.add('excited');
+      
+      if (Math.random() > 0.7) {
+        const messages = ['Nya~', 'Meow!', '...?', '!', 'Purr~'];
+        this.showBubble(messages[Math.floor(Math.random() * messages.length)]);
+      }
+    }
+    
+    private onMenuLeave(): void {
+      if (!this.cat) return;
+      this.cat.classList.remove('excited');
+      this.hideBubble();
+    }
+    
+    private showBubble(text: string): void {
+      if (!this.bubble || !this.message) return;
+      this.message.textContent = text;
+      this.bubble.classList.add('visible');
+      
+      setTimeout(() => this.hideBubble(), 2000);
+    }
+    
+    private hideBubble(): void {
+      if (!this.bubble) return;
+      this.bubble.classList.remove('visible');
+    }
+    
+    private startBlinking(): void {
+      const blink = () => {
+        if (this.isNapping) return;
+        
+        this.closeEyes();
+        setTimeout(() => this.openEyes(), 150);
+      };
+      
+      const scheduleBlink = () => {
+        this.blinkInterval = setTimeout(() => {
+          blink();
+          scheduleBlink();
+        }, 2000 + Math.random() * 3000);
+      };
+      
+      scheduleBlink();
+    }
+    
+    private closeEyes(): void {
+      if (!this.eyeLeft || !this.eyeRight || !this.eyeClosedLeft || !this.eyeClosedRight) return;
+      
+      (this.eyeLeft as SVGElement).style.display = 'none';
+      (this.eyeRight as SVGElement).style.display = 'none';
+      (this.eyeClosedLeft as SVGElement).style.display = 'block';
+      (this.eyeClosedRight as SVGElement).style.display = 'block';
+    }
+    
+    private openEyes(): void {
+      if (!this.eyeLeft || !this.eyeRight || !this.eyeClosedLeft || !this.eyeClosedRight) return;
+      
+      (this.eyeLeft as SVGElement).style.display = 'block';
+      (this.eyeRight as SVGElement).style.display = 'block';
+      (this.eyeClosedLeft as SVGElement).style.display = 'none';
+      (this.eyeClosedRight as SVGElement).style.display = 'none';
+    }
+    
+    private startIdleCheck(): void {
+      this.idleCheckInterval = setInterval(() => {
+        const idleTime = Date.now() - this.lastInteraction;
+        
+        if (idleTime > 20000 && !this.isNapping && !this.isPlaying) {
+          this.startNapping();
+        }
+      }, 1000);
+    }
+    
+    private startNapping(): void {
+      if (!this.cat || !this.sleepZs) return;
+      
+      this.isNapping = true;
+      this.cat.classList.add('napping');
+      this.closeEyes();
+      (this.sleepZs as SVGElement).style.display = 'block';
+    }
+    
+    private wakeUp(): void {
+      if (!this.cat || !this.sleepZs) return;
+      
+      this.isNapping = false;
+      this.cat.classList.remove('napping');
+      this.openEyes();
+      (this.sleepZs as SVGElement).style.display = 'none';
+      
+      if (Math.random() > 0.5) {
+        this.showBubble('*yawn*');
+      }
+    }
+    
+    private setupClickInteraction(): void {
+      if (!this.cat) return;
+      
+      this.cat.addEventListener('click', () => {
+        this.onCatClick();
+      });
+    }
+    
+    private onCatClick(): void {
+      if (!this.cat || this.isPlaying) return;
+      
+      this.cat.classList.add('happy');
+      
+      const reactions = ['Purr~', 'Nya!', 'Meow!', '♥', '*purr*', 'Mrow!'];
+      this.showBubble(reactions[Math.floor(Math.random() * reactions.length)]);
+      
+      setTimeout(() => {
+        this.cat?.classList.remove('happy');
+      }, 1000);
+      
+      this.lastInteraction = Date.now();
+    }
+    
+    public destroy(): void {
+      if (this.blinkInterval) clearTimeout(this.blinkInterval);
+      if (this.idleCheckInterval) clearInterval(this.idleCheckInterval);
+      if (this.playInterval) clearInterval(this.playInterval);
+      if (this.toyAnimationFrame) cancelAnimationFrame(this.toyAnimationFrame);
+    }
+  }
+  
+  let menuCat: MenuCat | null = null;
+  
+  function initMenuCat() {
+    menuCat?.destroy();
+    menuCat = new MenuCat();
+  }
+  
+  initMenuCat();
+  document.addEventListener('astro:after-swap', initMenuCat);
+</script>
+
+<style>
+  .menu-cat-container {
+    --cat-fur: #f5deb3;
+    --cat-fur-dark: #d4a853;
+    --cat-tail-tip: #c8a882;
+    --cat-ear-inner: #ffb6c1;
+    --cat-eyes: #2c1810;
+    --cat-nose: #ffb6c1;
+    --cat-whiskers: #4a4a4a;
+    --cat-markings: #8b7355;
+    
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  
+  .menu-cat {
+    position: relative;
+    width: 60px;
+    height: 45px;
+    cursor: pointer;
+    transition: transform 0.3s var(--ease-out-expo);
+    z-index: 2;
+  }
+  
+  .menu-cat:hover {
+    transform: scale(1.05);
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════════════════
+     TOYS
+     ═══════════════════════════════════════════════════════════════════════════ */
+  
+  .toys {
+    position: absolute;
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 8px;
+    pointer-events: auto;
+    z-index: 1;
+  }
+  
+  .toy {
+    opacity: 0;
+    transform: scale(0) translateY(10px);
+    transition: all 0.4s var(--ease-out-back);
+    cursor: pointer;
+    pointer-events: none;
+  }
+  
+  .menu-cat-container:hover .toy {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+  }
+  
+  .toy--yarn { transition-delay: 0s; }
+  .toy--fish { transition-delay: 0.1s; }
+  .toy--feather { transition-delay: 0.2s; }
+  
+  .toy.appear {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+  }
+  
+  .toy.wiggle {
+    animation: toy-wiggle 0.3s ease-in-out infinite;
+  }
+  
+  .toy.active {
+    z-index: 10;
+  }
+  
+  @keyframes toy-wiggle {
+    0%, 100% { transform: scale(1.1) rotate(-5deg); }
+    50% { transform: scale(1.1) rotate(5deg); }
+  }
+  
+  .toy:hover svg {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+  
+  .menu-cat__svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════════════════
+     CAT ANIMATIONS
+     ═══════════════════════════════════════════════════════════════════════════ */
+  
+  /* Idle tail sway */
+  .tail {
+    transform-origin: 60px 42px;
+    animation: tail-idle 3s ease-in-out infinite;
+  }
+  
+  @keyframes tail-idle {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(8deg); }
+  }
+  
+  /* Excited tail wag */
+  .menu-cat.excited .tail {
+    animation: tail-wag 0.3s ease-in-out infinite;
+  }
+  
+  @keyframes tail-wag {
+    0%, 100% { transform: rotate(-10deg); }
+    50% { transform: rotate(10deg); }
+  }
+  
+  /* Happy bounce */
+  .menu-cat.happy {
+    animation: happy-bounce 0.5s ease-out;
+  }
+  
+  @keyframes happy-bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    25% { transform: translateY(-5px) scale(1.05); }
+    50% { transform: translateY(-2px) scale(1.02); }
+  }
+  
+  /* Napping - closed eyes + slow breathing */
+  .menu-cat.napping .cat-body {
+    animation: breathing 3s ease-in-out infinite;
+  }
+  
+  @keyframes breathing {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(1.03); }
+  }
+  
+  /* Alert - ears perked, eyes wide */
+  .menu-cat.alert .ear-left,
+  .menu-cat.alert .ear-right {
+    animation: ear-perk 0.3s ease-out forwards;
+  }
+  
+  @keyframes ear-perk {
+    to { transform: rotate(0deg) translateY(-2px); }
+  }
+  
+  /* Playing state */
+  .menu-cat.playing {
+    animation: cat-bounce 0.5s ease-in-out infinite;
+  }
+  
+  @keyframes cat-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  
+  /* Pawing at yarn */
+  .menu-cat.pawing .paw-left {
+    animation: paw-swipe 0.4s ease-out infinite;
+    transform-origin: center right;
+  }
+  
+  @keyframes paw-swipe {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    50% { transform: translateX(-8px) rotate(-15deg); }
+  }
+  
+  /* Pouncing at fish */
+  .menu-cat.pouncing {
+    animation: pounce 0.6s ease-out;
+  }
+  
+  @keyframes pounce {
+    0% { transform: translateY(0) scaleX(1); }
+    30% { transform: translateY(2px) scaleX(1.1); }
+    60% { transform: translateY(-8px) scaleX(0.95); }
+    100% { transform: translateY(0) scaleX(1); }
+  }
+  
+  /* Jumping at feather */
+  .menu-cat.jumping {
+    animation: jump-reach 0.8s ease-out;
+  }
+  
+  @keyframes jump-reach {
+    0% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(3px) rotate(-5deg); }
+    50% { transform: translateY(-12px) rotate(3deg); }
+    75% { transform: translateY(-6px) rotate(-2deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+  }
+  
+  /* Sleep Z's floating */
+  .sleep-zs .z {
+    animation: z-float 2s ease-in-out infinite;
+    opacity: 0;
+  }
+  
+  .z-1 {
+    animation-delay: 0s;
+  }
+  
+  .z-2 {
+    animation-delay: 0.5s;
+  }
+  
+  .z-3 {
+    animation-delay: 1s;
+  }
+  
+  @keyframes z-float {
+    0% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    20% {
+      opacity: 0.7;
+    }
+    80% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* Ear twitch */
+  .ear {
+    transform-origin: center bottom;
+    transition: transform 0.2s var(--ease-out-expo);
+  }
+  
+  .ear-inner {
+    transform-origin: center bottom;
+    transition: transform 0.2s var(--ease-out-expo);
+  }
+  
+  .menu-cat:hover .ear-left {
+    animation: ear-twitch-left 0.8s ease-out;
+  }
+  
+  .menu-cat:hover .ear-right {
+    animation: ear-twitch-right 0.8s ease-out 0.1s;
+  }
+  
+  @keyframes ear-twitch-left {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-8deg); }
+    50% { transform: rotate(3deg); }
+    75% { transform: rotate(-2deg); }
+  }
+  
+  @keyframes ear-twitch-right {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(8deg); }
+    50% { transform: rotate(-3deg); }
+    75% { transform: rotate(2deg); }
+  }
+  
+  /* Whisker twitch */
+  .whisker {
+    transform-origin: right center;
+    transition: transform 0.2s ease-out;
+  }
+  
+  .whiskers line:nth-child(4),
+  .whiskers line:nth-child(5),
+  .whiskers line:nth-child(6) {
+    transform-origin: left center;
+  }
+  
+  .menu-cat:hover .whisker {
+    animation: whisker-twitch 0.4s ease-out;
+  }
+  
+  @keyframes whisker-twitch {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(5deg); }
+  }
+  
+  /* Pupil transitions */
+  .pupil {
+    transition: transform 0.1s ease-out;
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════════════════
+     SPEECH BUBBLE
+     ═══════════════════════════════════════════════════════════════════════════ */
+  
+  .menu-cat__bubble {
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transition: all 0.2s var(--ease-out-back);
+    pointer-events: none;
+    z-index: 10;
+  }
+  
+  .menu-cat__bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--color-bg-elevated);
+    border-bottom: none;
+  }
+  
+  .menu-cat__bubble.visible {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  
+  .menu-cat__message {
+    color: var(--color-text-primary);
+    font-family: var(--font-display);
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════════════════
+     DARK THEME
+     ═══════════════════════════════════════════════════════════════════════════ */
+  
+  :global([data-theme="dark"]) .menu-cat {
+    --cat-whiskers: #a0a0a0;
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════════════════
+     REDUCED MOTION
+     ═══════════════════════════════════════════════════════════════════════════ */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .tail,
+    .menu-cat.excited .tail,
+    .menu-cat.napping .cat-body,
+    .sleep-zs .z,
+    .menu-cat:hover .ear-left,
+    .menu-cat:hover .ear-right,
+    .menu-cat:hover .whisker {
+      animation: none;
+    }
+    
+    .menu-cat.happy {
+      animation: none;
+    }
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════════════════
+     MOBILE
+     ═══════════════════════════════════════════════════════════════════════════ */
+  
+  @media (max-width: 480px) {
+    .menu-cat {
+      width: 50px;
+      height: 38px;
+    }
+  }
+</style>

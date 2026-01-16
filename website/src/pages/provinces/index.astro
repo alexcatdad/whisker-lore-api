@@ -1,9 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import EntryCard from "../../components/EntryCard.astro";
-import GearDivider from "../../components/GearDivider.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import GearDivider from "../../components/GearDivider.astro";
+import EntryCard from "../../components/EntryCard.astro";
 
 const allLore = await getCollection("lore");
 
@@ -12,47 +12,52 @@ const provinceEntries = allLore.filter((entry) => {
   const tags = entry.data.tags.map((t) => t.toLowerCase());
   return (
     entry.data.category === "locations" ||
-    tags.some(t => t.includes("province") || t.includes("region"))
+    tags.some((t) => t.includes("province") || t.includes("region"))
   );
 });
 
 function getExcerpt(content: string, maxLength = 120): string {
   const text = content.replace(/^#.*$/gm, "").trim();
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trim() + "...";
+  return `${text.slice(0, maxLength).trim()}...`;
 }
 
 const provinces = [
   {
     name: "Higashi-hama",
     translation: "East Shore",
-    description: "The landing province for newcomers, where the Great Torii Gate deposits cats from beyond the Veil. Coastal towns blend fishing traditions with welcome centers for the newly arrived.",
-    character: "Transitional, welcoming, hopeful"
+    description:
+      "The landing province for newcomers, where the Great Torii Gate deposits cats from beyond the Veil. Coastal towns blend fishing traditions with welcome centers for the newly arrived.",
+    character: "Transitional, welcoming, hopeful",
   },
   {
-    name: "Kawa-no-kuni", 
+    name: "Kawa-no-kuni",
     translation: "River Country",
-    description: "The agricultural heartland of Neko-kuni, where terraced rice paddies cascade down gentle hills and traditional farming communities maintain customs unchanged for generations.",
-    character: "Traditional, conservative, abundant"
+    description:
+      "The agricultural heartland of Neko-kuni, where terraced rice paddies cascade down gentle hills and traditional farming communities maintain customs unchanged for generations.",
+    character: "Traditional, conservative, abundant",
   },
   {
     name: "Yama-takumi",
-    translation: "Mountain Forge", 
-    description: "The industrial province where great gear-towers rise from mountain peaks and the Engineer's Guild pushes the boundaries of Whisker-Punk innovation.",
-    character: "Innovative, industrious, ambitious"
+    translation: "Mountain Forge",
+    description:
+      "The industrial province where great gear-towers rise from mountain peaks and the Engineer's Guild pushes the boundaries of Whisker-Punk innovation.",
+    character: "Innovative, industrious, ambitious",
   },
   {
     name: "Mori-shizuka",
     translation: "Silent Forest",
-    description: "The spiritual and medical center of the realm, where ancient forests harbor healing temples and the boundary between worlds grows mysteriously thin.",
-    character: "Contemplative, ancient, mystical"
+    description:
+      "The spiritual and medical center of the realm, where ancient forests harbor healing temples and the boundary between worlds grows mysteriously thin.",
+    character: "Contemplative, ancient, mystical",
   },
   {
     name: "Minato-kassei",
     translation: "Thriving Port",
-    description: "The cosmopolitan trade capital where merchant wealth challenges political tradition, and cats from every province mingle in crowded market streets.",
-    character: "Wealthy, cosmopolitan, complex"
-  }
+    description:
+      "The cosmopolitan trade capital where merchant wealth challenges political tradition, and cats from every province mingle in crowded market streets.",
+    character: "Wealthy, cosmopolitan, complex",
+  },
 ];
 ---
 

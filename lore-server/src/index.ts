@@ -6,7 +6,7 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import * as db from "./db.js";
-import { EMBEDDING_MODEL, OLLAMA_URL, healthCheck as ollamaHealthCheck } from "./embeddings.js";
+import { OLLAMA_URL, healthCheck as ollamaHealthCheck } from "./embeddings.js";
 import { createTimer, endRequest, log, registerCrashHandlers, startRequest } from "./logger.js";
 
 const VERSION = "0.3.0";

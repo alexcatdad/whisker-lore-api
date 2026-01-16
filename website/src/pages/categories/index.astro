@@ -1,8 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import CategoryCard from "../../components/CategoryCard.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CategoryCard from "../../components/CategoryCard.astro";
 
 const allLore = await getCollection("lore");
 
@@ -12,7 +12,7 @@ const categoryCounts = allLore.reduce(
     acc[cat] = (acc[cat] || 0) + 1;
     return acc;
   },
-  {} as Record<string, number>
+  {} as Record<string, number>,
 );
 
 const sortedCategories = Object.entries(categoryCounts).sort((a, b) => a[0].localeCompare(b[0]));

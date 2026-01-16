@@ -1,4 +1,6 @@
 ---
+import MenuCat from "./MenuCat.astro";
+
 const navItems = [
   { label: "Home", href: `${import.meta.env.BASE_URL}` },
   { label: "Categories", href: `${import.meta.env.BASE_URL}categories/` },
@@ -30,6 +32,11 @@ const navItems = [
         <span class="header__title-sub">Shogunate</span>
       </span>
     </a>
+
+    <!-- Menu Cat Mascot -->
+    <div class="header__mascot">
+      <MenuCat />
+    </div>
 
     <!-- Navigation -->
     <nav class="header__nav">
@@ -210,6 +217,27 @@ const navItems = [
   @media (max-width: 480px) {
     .header__title {
       display: none;
+    }
+  }
+
+  /* Mascot */
+  .header__mascot {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .header__mascot {
+      display: flex;
+      align-items: center;
+      margin-left: var(--space-6);
+      position: relative;
+      min-width: 100px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .header__mascot {
+      min-width: 120px;
     }
   }
 

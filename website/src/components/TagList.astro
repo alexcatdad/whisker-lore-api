@@ -5,8 +5,8 @@ interface Props {
 }
 
 const { tags, limit } = Astro.props;
-const displayTags = limit ? tags.slice(0, limit) : tags;
-const hiddenCount = limit && tags.length > limit ? tags.length - limit : 0;
+const _displayTags = limit ? tags.slice(0, limit) : tags;
+const _hiddenCount = limit && tags.length > limit ? tags.length - limit : 0;
 ---
 
 <div class="tag-list">

@@ -2,13 +2,7 @@ import * as lancedb from "@lancedb/lancedb";
 import { v4 as uuidv4 } from "uuid";
 import { embed } from "./embeddings.js";
 import { createTimer, log } from "./logger.js";
-import type {
-  CreateEntryInput,
-  LoreEntry,
-  LoreEntryWithVector,
-  SearchResult,
-  UpdateEntryInput,
-} from "./types.js";
+import type { CreateEntryInput, LoreEntry, SearchResult, UpdateEntryInput } from "./types.js";
 
 export const DB_PATH = process.env.LORE_DB_PATH || "./data/lore_db";
 const MAX_RECONNECT_ATTEMPTS = 2;
@@ -65,7 +59,7 @@ async function withRetry<T>(
 }
 
 export async function connect(): Promise<void> {
-  const timer = createTimer();
+  const _timer = createTimer();
 
   try {
     db = await lancedb.connect(DB_PATH);

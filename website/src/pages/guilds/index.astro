@@ -1,9 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import EntryCard from "../../components/EntryCard.astro";
-import GearDivider from "../../components/GearDivider.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import GearDivider from "../../components/GearDivider.astro";
+import EntryCard from "../../components/EntryCard.astro";
 
 const allLore = await getCollection("lore");
 
@@ -22,52 +22,59 @@ const guildEntries = allLore.filter((entry) => {
 function getExcerpt(content: string, maxLength = 120): string {
   const text = content.replace(/^#.*$/gm, "").trim();
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trim() + "...";
+  return `${text.slice(0, maxLength).trim()}...`;
 }
 
 const guilds = [
   {
     name: "Engineer's Guild",
     icon: "M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z",
-    description: "Masters of Whisker-Punk technology, the engineers design and maintain the gear-towers, kinetic paths, and mechanical wonders that power civilization.",
-    specialties: ["Mechanics", "Innovation", "Power Systems"]
+    description:
+      "Masters of Whisker-Punk technology, the engineers design and maintain the gear-towers, kinetic paths, and mechanical wonders that power civilization.",
+    specialties: ["Mechanics", "Innovation", "Power Systems"],
   },
   {
     name: "Merchant's Guild",
     icon: "M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z",
-    description: "Controllers of trade and commerce, the merchants manage the flow of goods, currency, and economic prosperity across all five provinces.",
-    specialties: ["Trade", "Finance", "Negotiation"]
+    description:
+      "Controllers of trade and commerce, the merchants manage the flow of goods, currency, and economic prosperity across all five provinces.",
+    specialties: ["Trade", "Finance", "Negotiation"],
   },
   {
     name: "Healer's Guild",
     icon: "M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z",
-    description: "Practitioners of medicine and spiritual healing, the healers tend to both body and mind using ancient techniques and modern understanding.",
-    specialties: ["Medicine", "Wellness", "Spiritual Care"]
+    description:
+      "Practitioners of medicine and spiritual healing, the healers tend to both body and mind using ancient techniques and modern understanding.",
+    specialties: ["Medicine", "Wellness", "Spiritual Care"],
   },
   {
     name: "Farmer's Collective",
     icon: "M12 22a9.733 9.733 0 0 1-3.67-.71c-.27-.1-.5-.28-.66-.52-.16-.24-.24-.52-.24-.81V19a6.5 6.5 0 0 1-4.18-3.08 6.5 6.5 0 0 1 .74-7.38A6.5 6.5 0 0 1 11.5 6v.5A2.5 2.5 0 0 0 14 9h.5a6.47 6.47 0 0 1 5.5 3.5 6.5 6.5 0 0 1-4 9.04v-.58c0-.29-.08-.57-.24-.81-.16-.24-.39-.42-.66-.52A9.73 9.73 0 0 1 12 22z",
-    description: "Stewards of the land, the collective manages agriculture, food production, and maintains the delicate balance between civilization and nature.",
-    specialties: ["Agriculture", "Land Care", "Food Production"]
+    description:
+      "Stewards of the land, the collective manages agriculture, food production, and maintains the delicate balance between civilization and nature.",
+    specialties: ["Agriculture", "Land Care", "Food Production"],
   },
   {
     name: "Artisan's Union",
     icon: "M7 5h2V3H7v2zm0 8h2v-2H7v2zm0 8h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm-8 0h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2V7H3v2zm0-4h2V3H3v2zm8 8h2v-2h-2v2zm8 4h2v-2h-2v2zm0-4h2v-2h-2v2zm0 8h2v-2h-2v2zm0-12h2V7h-2v2zm-8 0h2V7h-2v2zm8-6v2h2V3h-2zm-8 2h2V3h-2v2zm4 16h2v-2h-2v2zm0-8h2v-2h-2v2zm0-8h2V3h-2v2z",
-    description: "Craftscats of exceptional skill, the artisans create everything from daily necessities to treasured works of art that define Neko-kuni's aesthetic.",
-    specialties: ["Craftsmanship", "Arts", "Skilled Trades"]
+    description:
+      "Craftscats of exceptional skill, the artisans create everything from daily necessities to treasured works of art that define Neko-kuni's aesthetic.",
+    specialties: ["Craftsmanship", "Arts", "Skilled Trades"],
   },
   {
     name: "Scholar's Circle",
     icon: "M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z",
-    description: "Keepers of knowledge and history, the scholars preserve ancient wisdom, conduct research, and educate the next generation of cat citizens.",
-    specialties: ["Education", "Research", "History"]
+    description:
+      "Keepers of knowledge and history, the scholars preserve ancient wisdom, conduct research, and educate the next generation of cat citizens.",
+    specialties: ["Education", "Research", "History"],
   },
   {
     name: "Performance Guild",
     icon: "M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z",
-    description: "Artists of entertainment and cultural preservation, the performers maintain traditions through theater, music, storytelling, and celebration.",
-    specialties: ["Entertainment", "Arts", "Cultural Preservation"]
-  }
+    description:
+      "Artists of entertainment and cultural preservation, the performers maintain traditions through theater, music, storytelling, and celebration.",
+    specialties: ["Entertainment", "Arts", "Cultural Preservation"],
+  },
 ];
 ---
 

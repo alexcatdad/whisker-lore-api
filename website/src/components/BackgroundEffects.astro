@@ -1,0 +1,589 @@
+---
+/**
+ * BackgroundEffects.astro
+ * Ambient background animations for The Whisker Shogunate
+ * Features: Floating lanterns, rotating gears, firefly particles, steam wisps
+ */
+---
+
+<div class="bg-effects" aria-hidden="true">
+  <!-- Floating Paper Lanterns -->
+  <div class="lanterns">
+    <div class="lantern lantern--1">
+      <svg viewBox="0 0 40 60" class="lantern__svg">
+        <defs>
+          <linearGradient id="lanternGlow1" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffcc80" />
+            <stop offset="50%" stop-color="#ff9933" />
+            <stop offset="100%" stop-color="#cc6600" />
+          </linearGradient>
+          <filter id="lanternBlur">
+            <feGaussianBlur stdDeviation="1" />
+          </filter>
+        </defs>
+        <ellipse cx="20" cy="8" rx="8" ry="4" fill="#8b4513" />
+        <path d="M8 10 Q6 30 12 50 Q20 55 28 50 Q34 30 32 10 Z" fill="url(#lanternGlow1)" />
+        <ellipse cx="20" cy="30" rx="10" ry="3" fill="#ffeecc" opacity="0.3" filter="url(#lanternBlur)" />
+        <line x1="20" y1="0" x2="20" y2="6" stroke="#8b4513" stroke-width="1.5" />
+        <path d="M12 52 Q20 58 28 52" stroke="#8b4513" stroke-width="2" fill="none" />
+      </svg>
+      <div class="lantern__glow"></div>
+    </div>
+    <div class="lantern lantern--2">
+      <svg viewBox="0 0 40 60" class="lantern__svg">
+        <ellipse cx="20" cy="8" rx="8" ry="4" fill="#8b4513" />
+        <path d="M8 10 Q6 30 12 50 Q20 55 28 50 Q34 30 32 10 Z" fill="url(#lanternGlow1)" />
+        <ellipse cx="20" cy="30" rx="10" ry="3" fill="#ffeecc" opacity="0.3" />
+        <line x1="20" y1="0" x2="20" y2="6" stroke="#8b4513" stroke-width="1.5" />
+        <path d="M12 52 Q20 58 28 52" stroke="#8b4513" stroke-width="2" fill="none" />
+      </svg>
+      <div class="lantern__glow"></div>
+    </div>
+    <div class="lantern lantern--3">
+      <svg viewBox="0 0 40 60" class="lantern__svg">
+        <ellipse cx="20" cy="8" rx="8" ry="4" fill="#8b4513" />
+        <path d="M8 10 Q6 30 12 50 Q20 55 28 50 Q34 30 32 10 Z" fill="url(#lanternGlow1)" />
+        <ellipse cx="20" cy="30" rx="10" ry="3" fill="#ffeecc" opacity="0.3" />
+        <line x1="20" y1="0" x2="20" y2="6" stroke="#8b4513" stroke-width="1.5" />
+        <path d="M12 52 Q20 58 28 52" stroke="#8b4513" stroke-width="2" fill="none" />
+      </svg>
+      <div class="lantern__glow"></div>
+    </div>
+  </div>
+
+  <!-- Decorative Brass Gears -->
+  <div class="gears">
+    <svg class="gear gear--large" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="brassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#d4a853" />
+          <stop offset="50%" stop-color="#b8860b" />
+          <stop offset="100%" stop-color="#8b6914" />
+        </linearGradient>
+      </defs>
+      <circle cx="50" cy="50" r="40" fill="none" stroke="url(#brassGradient)" stroke-width="8" />
+      <circle cx="50" cy="50" r="12" fill="url(#brassGradient)" />
+      <g fill="url(#brassGradient)">
+        <rect x="46" y="5" width="8" height="15" rx="2" />
+        <rect x="46" y="80" width="8" height="15" rx="2" />
+        <rect x="5" y="46" width="15" height="8" rx="2" />
+        <rect x="80" y="46" width="15" height="8" rx="2" />
+        <rect x="14" y="14" width="8" height="15" rx="2" transform="rotate(45 18 21.5)" />
+        <rect x="78" y="14" width="8" height="15" rx="2" transform="rotate(-45 82 21.5)" />
+        <rect x="14" y="71" width="8" height="15" rx="2" transform="rotate(-45 18 78.5)" />
+        <rect x="78" y="71" width="8" height="15" rx="2" transform="rotate(45 82 78.5)" />
+      </g>
+    </svg>
+    
+    <svg class="gear gear--medium" viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="30" fill="none" stroke="url(#brassGradient)" stroke-width="6" />
+      <circle cx="40" cy="40" r="10" fill="url(#brassGradient)" />
+      <g fill="url(#brassGradient)">
+        <rect x="36" y="5" width="8" height="12" rx="2" />
+        <rect x="36" y="63" width="8" height="12" rx="2" />
+        <rect x="5" y="36" width="12" height="8" rx="2" />
+        <rect x="63" y="36" width="12" height="8" rx="2" />
+        <rect x="12" y="12" width="8" height="12" rx="2" transform="rotate(45 16 18)" />
+        <rect x="60" y="12" width="8" height="12" rx="2" transform="rotate(-45 64 18)" />
+      </g>
+    </svg>
+    
+    <svg class="gear gear--small" viewBox="0 0 60 60">
+      <circle cx="30" cy="30" r="20" fill="none" stroke="url(#brassGradient)" stroke-width="5" />
+      <circle cx="30" cy="30" r="7" fill="url(#brassGradient)" />
+      <g fill="url(#brassGradient)">
+        <rect x="27" y="3" width="6" height="10" rx="1" />
+        <rect x="27" y="47" width="6" height="10" rx="1" />
+        <rect x="3" y="27" width="10" height="6" rx="1" />
+        <rect x="47" y="27" width="10" height="6" rx="1" />
+      </g>
+    </svg>
+
+    <svg class="gear gear--tiny" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="12" fill="none" stroke="url(#brassGradient)" stroke-width="4" />
+      <circle cx="20" cy="20" r="4" fill="url(#brassGradient)" />
+      <g fill="url(#brassGradient)">
+        <rect x="17" y="2" width="6" height="8" rx="1" />
+        <rect x="17" y="30" width="6" height="8" rx="1" />
+        <rect x="2" y="17" width="8" height="6" rx="1" />
+        <rect x="30" y="17" width="8" height="6" rx="1" />
+      </g>
+    </svg>
+  </div>
+
+  <!-- Firefly Particles (Hotaru-hana inspired) -->
+  <div class="fireflies">
+    <div class="firefly firefly--1"></div>
+    <div class="firefly firefly--2"></div>
+    <div class="firefly firefly--3"></div>
+    <div class="firefly firefly--4"></div>
+    <div class="firefly firefly--5"></div>
+    <div class="firefly firefly--6"></div>
+    <div class="firefly firefly--7"></div>
+    <div class="firefly firefly--8"></div>
+  </div>
+
+  <!-- Steam Wisps -->
+  <div class="steam">
+    <div class="steam__wisp steam__wisp--1"></div>
+    <div class="steam__wisp steam__wisp--2"></div>
+    <div class="steam__wisp steam__wisp--3"></div>
+  </div>
+
+  <!-- Decorative Corner Gears -->
+  <div class="corner-gear corner-gear--top-left">
+    <svg viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="var(--color-accent-tertiary)" stroke-width="6" opacity="0.15" />
+      <circle cx="60" cy="60" r="35" fill="none" stroke="var(--color-accent-tertiary)" stroke-width="4" opacity="0.1" />
+      <circle cx="60" cy="60" r="15" fill="var(--color-accent-tertiary)" opacity="0.1" />
+    </svg>
+  </div>
+  <div class="corner-gear corner-gear--bottom-right">
+    <svg viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="var(--color-accent-tertiary)" stroke-width="6" opacity="0.15" />
+      <circle cx="60" cy="60" r="35" fill="none" stroke="var(--color-accent-tertiary)" stroke-width="4" opacity="0.1" />
+      <circle cx="60" cy="60" r="15" fill="var(--color-accent-tertiary)" opacity="0.1" />
+    </svg>
+  </div>
+</div>
+
+<style>
+  .bg-effects {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     FLOATING LANTERNS
+     ═══════════════════════════════════════════════════════════════════════════ */
+  
+  .lanterns {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lantern {
+    position: absolute;
+    width: 35px;
+    height: 55px;
+    opacity: 0.6;
+    animation: lantern-float 20s ease-in-out infinite;
+  }
+
+  .lantern__svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 8px rgba(255, 153, 51, 0.4));
+  }
+
+  .lantern__glow {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(255, 153, 51, 0.3) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  .lantern--1 {
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+    animation-duration: 25s;
+  }
+
+  .lantern--2 {
+    top: 30%;
+    right: 8%;
+    animation-delay: -7s;
+    animation-duration: 22s;
+    opacity: 0.5;
+  }
+
+  .lantern--3 {
+    bottom: 20%;
+    left: 15%;
+    animation-delay: -12s;
+    animation-duration: 28s;
+    opacity: 0.4;
+  }
+
+  @keyframes lantern-float {
+    0%, 100% {
+      transform: translateY(0) rotate(-3deg);
+    }
+    25% {
+      transform: translateY(-30px) rotate(2deg);
+    }
+    50% {
+      transform: translateY(-15px) rotate(-2deg);
+    }
+    75% {
+      transform: translateY(-40px) rotate(3deg);
+    }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      opacity: 0.5;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     ROTATING GEARS
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .gears {
+    position: absolute;
+    inset: 0;
+  }
+
+  .gear {
+    position: absolute;
+    opacity: 0.08;
+  }
+
+  .gear--large {
+    width: 150px;
+    height: 150px;
+    bottom: -30px;
+    right: 5%;
+    animation: gear-rotate 40s linear infinite;
+  }
+
+  .gear--medium {
+    width: 100px;
+    height: 100px;
+    bottom: 30px;
+    right: calc(5% + 100px);
+    animation: gear-rotate-reverse 30s linear infinite;
+  }
+
+  .gear--small {
+    width: 70px;
+    height: 70px;
+    top: 15%;
+    left: -20px;
+    animation: gear-rotate 25s linear infinite;
+  }
+
+  .gear--tiny {
+    width: 50px;
+    height: 50px;
+    top: calc(15% + 50px);
+    left: 30px;
+    animation: gear-rotate-reverse 20s linear infinite;
+  }
+
+  @keyframes gear-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes gear-rotate-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     FIREFLIES
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .fireflies {
+    position: absolute;
+    inset: 0;
+  }
+
+  .firefly {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, #ffe4a8 0%, #ffcc66 40%, transparent 70%);
+    border-radius: 50%;
+    animation: firefly-drift 15s ease-in-out infinite, firefly-glow 2s ease-in-out infinite;
+  }
+
+  .firefly--1 {
+    top: 20%;
+    left: 30%;
+    animation-delay: 0s;
+  }
+
+  .firefly--2 {
+    top: 40%;
+    right: 25%;
+    animation-delay: -3s;
+    animation-duration: 18s, 2.5s;
+  }
+
+  .firefly--3 {
+    bottom: 35%;
+    left: 45%;
+    animation-delay: -6s;
+    animation-duration: 20s, 1.8s;
+  }
+
+  .firefly--4 {
+    top: 60%;
+    left: 20%;
+    animation-delay: -9s;
+    animation-duration: 16s, 2.2s;
+  }
+
+  .firefly--5 {
+    top: 15%;
+    right: 35%;
+    animation-delay: -2s;
+    animation-duration: 22s, 1.9s;
+  }
+
+  .firefly--6 {
+    bottom: 25%;
+    right: 15%;
+    animation-delay: -8s;
+    animation-duration: 19s, 2.3s;
+  }
+
+  .firefly--7 {
+    top: 50%;
+    left: 60%;
+    animation-delay: -5s;
+    animation-duration: 17s, 2.1s;
+  }
+
+  .firefly--8 {
+    bottom: 45%;
+    left: 10%;
+    animation-delay: -11s;
+    animation-duration: 21s, 1.7s;
+  }
+
+  @keyframes firefly-drift {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    20% {
+      transform: translate(40px, -30px);
+    }
+    40% {
+      transform: translate(-20px, -50px);
+    }
+    60% {
+      transform: translate(30px, -20px);
+    }
+    80% {
+      transform: translate(-30px, -40px);
+    }
+  }
+
+  @keyframes firefly-glow {
+    0%, 100% {
+      opacity: 0.2;
+      box-shadow: 0 0 4px 2px rgba(255, 204, 102, 0.3);
+    }
+    50% {
+      opacity: 0.8;
+      box-shadow: 0 0 12px 4px rgba(255, 204, 102, 0.6);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     STEAM WISPS
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .steam {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    overflow: hidden;
+  }
+
+  .steam__wisp {
+    position: absolute;
+    width: 100px;
+    height: 200px;
+    background: linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 30%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0.03) 70%,
+      transparent 100%
+    );
+    border-radius: 50%;
+    filter: blur(20px);
+    animation: steam-rise 12s ease-out infinite;
+  }
+
+  .steam__wisp--1 {
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .steam__wisp--2 {
+    left: 50%;
+    animation-delay: -4s;
+    animation-duration: 15s;
+  }
+
+  .steam__wisp--3 {
+    right: 15%;
+    animation-delay: -8s;
+    animation-duration: 18s;
+  }
+
+  @keyframes steam-rise {
+    0% {
+      opacity: 0;
+      transform: translateY(100%) scaleX(0.5);
+    }
+    10% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-100%) scaleX(1.5);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     CORNER GEARS
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .corner-gear {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+  }
+
+  .corner-gear svg {
+    width: 100%;
+    height: 100%;
+    animation: gear-rotate 60s linear infinite;
+  }
+
+  .corner-gear--top-left {
+    top: -60px;
+    left: -60px;
+  }
+
+  .corner-gear--bottom-right {
+    bottom: -60px;
+    right: -60px;
+  }
+
+  .corner-gear--bottom-right svg {
+    animation-direction: reverse;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     DARK THEME ADJUSTMENTS
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  :global([data-theme="dark"]) .lantern {
+    opacity: 0.8;
+  }
+
+  :global([data-theme="dark"]) .lantern__glow {
+    background: radial-gradient(circle, rgba(255, 153, 51, 0.5) 0%, transparent 70%);
+  }
+
+  :global([data-theme="dark"]) .gear {
+    opacity: 0.12;
+  }
+
+  :global([data-theme="dark"]) .firefly {
+    animation: firefly-drift 15s ease-in-out infinite, firefly-glow-dark 2s ease-in-out infinite;
+  }
+
+  @keyframes firefly-glow-dark {
+    0%, 100% {
+      opacity: 0.4;
+      box-shadow: 0 0 6px 3px rgba(255, 204, 102, 0.5);
+    }
+    50% {
+      opacity: 1;
+      box-shadow: 0 0 16px 6px rgba(255, 204, 102, 0.8);
+    }
+  }
+
+  :global([data-theme="dark"]) .steam__wisp {
+    background: linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(255, 255, 255, 0.02) 30%,
+      rgba(255, 255, 255, 0.04) 50%,
+      rgba(255, 255, 255, 0.02) 70%,
+      transparent 100%
+    );
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     REDUCED MOTION
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .lantern,
+    .gear,
+    .firefly,
+    .steam__wisp,
+    .corner-gear svg {
+      animation: none;
+    }
+
+    .lantern {
+      opacity: 0.3;
+    }
+
+    .firefly {
+      opacity: 0.5;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     MOBILE OPTIMIZATION
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  @media (max-width: 768px) {
+    .lantern--3,
+    .gear--tiny,
+    .firefly--5,
+    .firefly--6,
+    .firefly--7,
+    .firefly--8,
+    .steam__wisp--3 {
+      display: none;
+    }
+
+    .gear--large {
+      width: 100px;
+      height: 100px;
+    }
+
+    .gear--medium {
+      width: 70px;
+      height: 70px;
+    }
+
+    .corner-gear {
+      width: 120px;
+      height: 120px;
+    }
+  }
+</style>

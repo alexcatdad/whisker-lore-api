@@ -1,0 +1,402 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE WHISKER SHOGUNATE — Smart Page Transitions
+   Direction-aware, context-sensitive transitions with morphing elements
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Transition Variables ─── */
+:root {
+  --transition-duration: 0.4s;
+  --transition-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DEFAULT TRANSITIONS (Crossfade)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--transition-duration);
+  animation-timing-function: var(--transition-ease);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DIRECTION-AWARE SLIDE TRANSITIONS
+   Applied via data-direction attribute on <html>
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* --- Forward Navigation (Drilling Down) --- */
+/* Home → Category, Category → Entry */
+
+@keyframes slide-out-left {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to { opacity: 0; transform: translateX(-15%) scale(0.95); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(15%) scale(0.95); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+[data-direction="forward"]::view-transition-old(root) {
+  animation: slide-out-left var(--transition-duration) var(--transition-ease) forwards;
+}
+
+[data-direction="forward"]::view-transition-new(root) {
+  animation: slide-in-right var(--transition-duration) var(--transition-ease) forwards;
+}
+
+/* --- Backward Navigation (Drilling Up) --- */
+/* Entry → Category, Category → Home */
+
+@keyframes slide-out-right {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to { opacity: 0; transform: translateX(15%) scale(0.95); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-15%) scale(0.95); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+[data-direction="back"]::view-transition-old(root) {
+  animation: slide-out-right var(--transition-duration) var(--transition-ease) forwards;
+}
+
+[data-direction="back"]::view-transition-new(root) {
+  animation: slide-in-left var(--transition-duration) var(--transition-ease) forwards;
+}
+
+/* --- Sibling Navigation (Same Level) --- */
+/* Entry → Entry, Category → Category */
+
+@keyframes fade-slide-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes fade-slide-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+[data-direction="sibling"]::view-transition-old(root) {
+  animation: fade-slide-out 0.25s ease-out forwards;
+}
+
+[data-direction="sibling"]::view-transition-new(root) {
+  animation: fade-slide-in 0.35s var(--transition-ease) forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MORPHING SHARED ELEMENTS
+   Elements that smoothly transform between pages
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* --- Header (persists across pages) --- */
+.header {
+  view-transition-name: header;
+}
+
+::view-transition-old(header),
+::view-transition-new(header) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* --- Logo (morphs position) --- */
+.header__logo {
+  view-transition-name: logo;
+}
+
+::view-transition-old(logo),
+::view-transition-new(logo) {
+  animation-duration: 0.3s;
+  animation-timing-function: var(--transition-ease-back);
+}
+
+/* --- Category Badge (morphs from card to header) --- */
+.entry__category,
+.category-card[data-transitioning] .category-card__title {
+  view-transition-name: category-badge;
+}
+
+::view-transition-old(category-badge),
+::view-transition-new(category-badge) {
+  animation-duration: 0.4s;
+  animation-timing-function: var(--transition-ease-back);
+}
+
+/* --- Category Icon (morphs between views) --- */
+.category-card[data-transitioning] .category-card__icon,
+.entry__category-row .category-icon {
+  view-transition-name: category-icon;
+}
+
+::view-transition-old(category-icon),
+::view-transition-new(category-icon) {
+  animation-duration: 0.45s;
+  animation-timing-function: var(--transition-ease-back);
+  height: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTENT-SPECIFIC TRANSITIONS
+   Different animations based on content type
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* --- Main content area --- */
+main {
+  view-transition-name: main-content;
+}
+
+@keyframes content-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes content-fade-down {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+::view-transition-old(main-content) {
+  animation: content-fade-down 0.25s ease-out forwards;
+}
+
+::view-transition-new(main-content) {
+  animation: content-fade-up 0.4s var(--transition-ease) forwards;
+  animation-delay: 0.1s;
+}
+
+/* --- Entry Header (zoom effect when entering article) --- */
+.entry__header {
+  view-transition-name: entry-header;
+}
+
+@keyframes header-zoom-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes header-zoom-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.02); }
+}
+
+::view-transition-old(entry-header) {
+  animation: header-zoom-out 0.3s ease-out forwards;
+}
+
+::view-transition-new(entry-header) {
+  animation: header-zoom-in 0.4s var(--transition-ease-back) forwards;
+}
+
+/* --- Hero Section (special treatment for home) --- */
+.hero {
+  view-transition-name: hero;
+}
+
+@keyframes hero-fade-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.05); }
+}
+
+@keyframes hero-fade-in {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+::view-transition-old(hero) {
+  animation: hero-fade-out 0.35s ease-out forwards;
+}
+
+::view-transition-new(hero) {
+  animation: hero-fade-in 0.5s var(--transition-ease) forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STAGGERED GRID TRANSITIONS
+   Category cards and entry cards animate in sequence
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.categories__grid,
+.grid {
+  view-transition-name: content-grid;
+}
+
+@keyframes grid-stagger-in {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+::view-transition-new(content-grid) {
+  animation: grid-stagger-in 0.5s var(--transition-ease) forwards;
+  animation-delay: 0.15s;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PAGE-TYPE SPECIFIC CLASSES
+   Applied to <main> for contextual transitions
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Home page - grand entrance */
+[data-page="home"] {
+  view-transition-name: page-home;
+}
+
+::view-transition-new(page-home) {
+  animation: fade-scale-in 0.5s var(--transition-ease) forwards;
+}
+
+/* Category listing - grid reveal */
+[data-page="category"] {
+  view-transition-name: page-category;
+}
+
+/* Lore entry - focused reading */
+[data-page="entry"] {
+  view-transition-name: page-entry;
+}
+
+@keyframes entry-reveal {
+  from { 
+    opacity: 0; 
+    clip-path: inset(0 0 100% 0);
+  }
+  to { 
+    opacity: 1; 
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+::view-transition-new(page-entry) {
+  animation: entry-reveal 0.5s var(--transition-ease) forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPECIAL EFFECTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* --- Paper Unfold Effect (for important transitions) --- */
+@keyframes paper-unfold {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) rotateX(-10deg);
+    transform-origin: top center;
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1000px) rotateX(0deg);
+  }
+}
+
+[data-transition="unfold"]::view-transition-new(root) {
+  animation: paper-unfold 0.6s var(--transition-ease) forwards;
+}
+
+/* --- Ink Wash Effect (fade with blur) --- */
+@keyframes ink-wash-out {
+  from { opacity: 1; filter: blur(0); }
+  to { opacity: 0; filter: blur(4px); }
+}
+
+@keyframes ink-wash-in {
+  from { opacity: 0; filter: blur(4px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+[data-transition="ink"]::view-transition-old(root) {
+  animation: ink-wash-out 0.3s ease-out forwards;
+}
+
+[data-transition="ink"]::view-transition-new(root) {
+  animation: ink-wash-in 0.4s var(--transition-ease) forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOADING STATES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.is-navigating {
+  cursor: wait;
+}
+
+.is-navigating main {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+/* Navigation indicator */
+.nav-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-secondary));
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 9999;
+  transition: transform 0.2s ease;
+}
+
+.is-navigating .nav-progress {
+  transform: scaleX(0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(main-content),
+  ::view-transition-new(main-content),
+  ::view-transition-old(entry-header),
+  ::view-transition-new(entry-header),
+  ::view-transition-old(hero),
+  ::view-transition-new(hero),
+  ::view-transition-new(content-grid),
+  ::view-transition-new(page-home),
+  ::view-transition-new(page-entry) {
+    animation: none;
+  }
+  
+  [data-direction]::view-transition-old(root),
+  [data-direction]::view-transition-new(root),
+  [data-transition]::view-transition-old(root),
+  [data-transition]::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE OPTIMIZATIONS
+   Simpler, faster transitions on mobile
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  :root {
+    --transition-duration: 0.3s;
+  }
+  
+  /* Simpler slide animations */
+  @keyframes mobile-slide-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  
+  @keyframes mobile-slide-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  [data-direction]::view-transition-old(root) {
+    animation: mobile-slide-out 0.2s ease-out forwards;
+  }
+  
+  [data-direction]::view-transition-new(root) {
+    animation: mobile-slide-in 0.3s ease-out forwards;
+  }
+}

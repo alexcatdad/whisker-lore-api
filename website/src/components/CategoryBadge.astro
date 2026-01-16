@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { category, size = "md", linked = true } = Astro.props;
-const href = `${import.meta.env.BASE_URL}categories/${category}/`;
+const _href = `${import.meta.env.BASE_URL}categories/${category}/`;
 ---
 
 {linked ? (

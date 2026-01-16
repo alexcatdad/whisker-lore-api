@@ -1,7 +1,10 @@
 ---
+import { ViewTransitions } from "astro:transitions";
+import "../styles/global.css";
+import "../styles/transitions.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import "../styles/global.css";
+import BackgroundEffects from "../components/BackgroundEffects.astro";
 
 interface Props {
   title: string;
@@ -9,10 +12,10 @@ interface Props {
   class?: string;
 }
 
-const { 
-  title, 
+const {
+  title,
   description = "Discover the lore of Neko-kuni, a feudal Japan-inspired world built by and for cats.",
-  class: className = ""
+  class: className = "",
 } = Astro.props;
 
 const fullTitle = title === "The Whisker Shogunate" ? title : `${title} | The Whisker Shogunate`;
@@ -32,7 +35,7 @@ const fullTitle = title === "The Whisker Shogunate" ? title : `${title} | The Wh
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+JP:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     
@@ -46,11 +49,136 @@ const fullTitle = title === "The Whisker Shogunate" ? title : `${title} | The Wh
       })();
     </script>
     
+    <!-- Preserve theme across View Transitions -->
+    <script is:inline>
+      document.addEventListener('astro:before-swap', (event) => {
+        const theme = document.documentElement.getAttribute('data-theme');
+        event.newDocument.documentElement.setAttribute('data-theme', theme);
+        
+        // Copy navigation direction to new document
+        const direction = document.documentElement.getAttribute('data-direction');
+        if (direction) {
+          event.newDocument.documentElement.setAttribute('data-direction', direction);
+        }
+      });
+    </script>
+    
+    <!-- Smart Navigation Detection -->
+    <script is:inline>
+      (function() {
+        // Page hierarchy for direction detection
+        const getPageDepth = (path) => {
+          const segments = path.split('/').filter(Boolean);
+          // Adjust for base path
+          const basePath = '/the-whisker-shogunate';
+          const cleanPath = path.replace(basePath, '');
+          const cleanSegments = cleanPath.split('/').filter(Boolean);
+          
+          if (cleanSegments.length === 0) return 0; // Home
+          if (cleanSegments[0] === 'categories' && cleanSegments.length === 1) return 1;
+          if (cleanSegments[0] === 'categories' && cleanSegments.length === 2) return 2;
+          if (cleanSegments[0] === 'provinces' && cleanSegments.length === 1) return 1;
+          if (cleanSegments[0] === 'guilds' && cleanSegments.length === 1) return 1;
+          if (cleanSegments[0] === 'lore') return 3; // Lore entries are deepest
+          return cleanSegments.length;
+        };
+        
+        const getPageCategory = (path) => {
+          const match = path.match(/categories\/([^\/]+)/);
+          return match ? match[1] : null;
+        };
+        
+        let lastPath = window.location.pathname;
+        let lastDepth = getPageDepth(lastPath);
+        let navigationSource = 'link'; // 'link', 'back', 'forward'
+        
+        // Track browser back/forward
+        let isPopState = false;
+        window.addEventListener('popstate', () => {
+          isPopState = true;
+        });
+        
+        // Detect navigation direction before navigation starts
+        document.addEventListener('click', (e) => {
+          const link = e.target.closest('a');
+          if (!link || !link.href) return;
+          
+          try {
+            const url = new URL(link.href);
+            if (url.origin !== window.location.origin) return;
+            
+            const newPath = url.pathname;
+            const newDepth = getPageDepth(newPath);
+            const currentDepth = getPageDepth(window.location.pathname);
+            
+            let direction = 'sibling';
+            
+            if (newDepth > currentDepth) {
+              direction = 'forward';
+            } else if (newDepth < currentDepth) {
+              direction = 'back';
+            } else {
+              // Same depth - check if same category
+              const currentCat = getPageCategory(window.location.pathname);
+              const newCat = getPageCategory(newPath);
+              if (currentCat && newCat && currentCat !== newCat) {
+                direction = 'sibling';
+              }
+            }
+            
+            document.documentElement.setAttribute('data-direction', direction);
+            
+            // Mark the clicked card for morphing
+            const card = link.closest('.category-card');
+            if (card) {
+              card.setAttribute('data-transitioning', 'true');
+            }
+          } catch (e) {}
+        });
+        
+        // Handle back/forward button
+        document.addEventListener('astro:before-preparation', () => {
+          if (isPopState) {
+            // Determine direction based on history
+            const newDepth = getPageDepth(window.location.pathname);
+            if (newDepth < lastDepth) {
+              document.documentElement.setAttribute('data-direction', 'back');
+            } else if (newDepth > lastDepth) {
+              document.documentElement.setAttribute('data-direction', 'forward');
+            } else {
+              document.documentElement.setAttribute('data-direction', 'sibling');
+            }
+            isPopState = false;
+          }
+        });
+        
+        // Update tracking after navigation
+        document.addEventListener('astro:after-swap', () => {
+          lastPath = window.location.pathname;
+          lastDepth = getPageDepth(lastPath);
+          
+          // Clean up transitioning markers
+          document.querySelectorAll('[data-transitioning]').forEach(el => {
+            el.removeAttribute('data-transitioning');
+          });
+        });
+        
+        // Clear direction after transition completes
+        document.addEventListener('astro:page-load', () => {
+          setTimeout(() => {
+            document.documentElement.removeAttribute('data-direction');
+          }, 500);
+        });
+      })();
+    </script>
+    
+    <ViewTransitions />
     <title>{fullTitle}</title>
   </head>
   <body>
+    <BackgroundEffects />
     <Header />
-    <main class={className}>
+    <main class={className} transition:animate="slide">
       <slot />
     </main>
     <Footer />

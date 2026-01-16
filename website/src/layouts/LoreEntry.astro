@@ -2,6 +2,8 @@
 import Base from "./Base.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import GearDivider from "../components/GearDivider.astro";
+import CategoryIcon from "../components/CategoryIcon.astro";
+import EntryHeaderGraphic from "../components/EntryHeaderGraphic.astro";
 
 interface Props {
   title: string;
@@ -23,6 +25,7 @@ const formattedDate = new Date(updatedAt).toLocaleDateString("en-US", {
   <article class="entry" data-category={category}>
     <!-- Header -->
     <header class="entry__header">
+      <EntryHeaderGraphic category={category} />
       <div class="entry__header-inner">
         <Breadcrumbs
           items={[
@@ -34,9 +37,12 @@ const formattedDate = new Date(updatedAt).toLocaleDateString("en-US", {
         />
 
         <div class="entry__title-section">
-          <a href={`${import.meta.env.BASE_URL}categories/${category}/`} class="entry__category">
-            {category}
-          </a>
+          <div class="entry__category-row">
+            <CategoryIcon category={category} size={40} animate />
+            <a href={`${import.meta.env.BASE_URL}categories/${category}/`} class="entry__category">
+              {category}
+            </a>
+          </div>
           <h1 class="entry__title">{title}</h1>
           <time class="entry__date" datetime={updatedAt}>
             Updated {formattedDate}
@@ -89,9 +95,11 @@ const formattedDate = new Date(updatedAt).toLocaleDateString("en-US", {
 
   /* Header */
   .entry__header {
+    position: relative;
     background-color: var(--color-bg-secondary);
     border-bottom: 1px solid var(--color-border);
     padding: var(--space-8) var(--space-4) var(--space-12);
+    overflow: hidden;
   }
 
   @media (min-width: 768px) {
@@ -101,12 +109,21 @@ const formattedDate = new Date(updatedAt).toLocaleDateString("en-US", {
   }
 
   .entry__header-inner {
+    position: relative;
     max-width: var(--max-width-content);
     margin-inline: auto;
+    z-index: 1;
   }
 
   .entry__title-section {
     margin-top: var(--space-8);
+  }
+
+  .entry__category-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
   }
 
   .entry__category {
@@ -117,10 +134,9 @@ const formattedDate = new Date(updatedAt).toLocaleDateString("en-US", {
     letter-spacing: var(--tracking-wider);
     color: var(--category-color);
     text-decoration: none;
-    margin-bottom: var(--space-3);
-    padding: var(--space-1) var(--space-3);
+    padding: var(--space-2) var(--space-4);
     background-color: var(--category-bg);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     transition: all var(--duration-fast) var(--ease-out-expo);
   }
 
@@ -128,6 +144,7 @@ const formattedDate = new Date(updatedAt).toLocaleDateString("en-US", {
     background-color: var(--category-color);
     color: var(--color-bg-primary);
     text-decoration: none;
+    transform: translateY(-1px);
   }
 
   .entry__title {

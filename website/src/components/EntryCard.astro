@@ -1,4 +1,6 @@
 ---
+import CategoryIcon from "./CategoryIcon.astro";
+
 interface Props {
   title: string;
   category: string;
@@ -11,16 +13,23 @@ interface Props {
 const { title, category, slug, excerpt, tags = [], featured = false } = Astro.props;
 ---
 
-<a 
-  href={`${import.meta.env.BASE_URL}lore/${category}/${slug}/`} 
-  class:list={["entry-card", { "entry-card--featured": featured }]} 
+<a
+  href={`${import.meta.env.BASE_URL}lore/${category}/${slug}/`}
+  class:list={["entry-card", { "entry-card--featured": featured }]}
   data-category={category}
 >
+  <div class="entry-card__icon-bg">
+    <CategoryIcon category={category} size={64} />
+  </div>
+
   <div class="entry-card__header">
+    <div class="entry-card__icon">
+      <CategoryIcon category={category} size={24} animate />
+    </div>
     <span class="entry-card__category">{category}</span>
     {featured && <span class="entry-card__badge">Featured</span>}
   </div>
-  
+
   <h3 class="entry-card__title">{title}</h3>
   
   {excerpt && <p class="entry-card__excerpt">{excerpt}</p>}
@@ -102,6 +111,36 @@ const { title, category, slug, excerpt, tags = [], featured = false } = Astro.pr
 
   .entry-card--featured::before {
     opacity: 1;
+  }
+
+  /* Background Icon (decorative) */
+  .entry-card__icon-bg {
+    position: absolute;
+    bottom: var(--space-4);
+    right: var(--space-3);
+    opacity: 0.08;
+    transition: opacity var(--duration-normal) var(--ease-out-expo),
+                transform var(--duration-slow) var(--ease-out-expo);
+    pointer-events: none;
+  }
+
+  .entry-card:hover .entry-card__icon-bg {
+    opacity: 0.15;
+    transform: scale(1.1) rotate(-5deg);
+  }
+
+  .entry-card--featured .entry-card__icon-bg {
+    opacity: 0.12;
+  }
+
+  /* Header Icon (prominent) */
+  .entry-card__icon {
+    flex-shrink: 0;
+    transition: transform var(--duration-normal) var(--ease-out-back);
+  }
+
+  .entry-card:hover .entry-card__icon {
+    transform: scale(1.15) rotate(5deg);
   }
 
   /* Header */

@@ -1,8 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import EntryCard from "../../components/EntryCard.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import EntryCard from "../../components/EntryCard.astro";
 
 export async function getStaticPaths() {
   const allLore = await getCollection("lore");
@@ -26,15 +26,41 @@ const { category } = Astro.params;
 const { entries } = Astro.props;
 
 function getExcerpt(content: string, maxLength = 150): string {
-  const text = content.replace(/^#.*$/gm, "").trim();
+  const text = content
+    // Remove headings
+    .replace(/^#{1,6}\s+.*$/gm, "")
+    // Remove bold/italic markers
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/__([^_]+)__/g, "$1")
+    .replace(/_([^_]+)_/g, "$1")
+    // Remove links but keep text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    // Remove images
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "")
+    // Remove inline code
+    .replace(/`([^`]+)`/g, "$1")
+    // Remove horizontal rules
+    .replace(/^[-*_]{3,}$/gm, "")
+    // Remove list markers
+    .replace(/^[\s]*[-*+]\s+/gm, "")
+    .replace(/^[\s]*\d+\.\s+/gm, "")
+    // Collapse multiple newlines/spaces
+    .replace(/\n+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trim() + "...";
+  return `${text.slice(0, maxLength).trim()}...`;
 }
 
 const categoryDescriptions: Record<string, string> = {
-  architecture: "Explore the buildings, structures, and architectural styles that define the physical landscape of Neko-kuni.",
-  characters: "Meet the notable figures and personalities who shape the world of the Whisker Shogunate.",
-  cuisine: "Discover the rich food culture, dining customs, and culinary traditions of cat society.",
+  architecture:
+    "Explore the buildings, structures, and architectural styles that define the physical landscape of Neko-kuni.",
+  characters:
+    "Meet the notable figures and personalities who shape the world of the Whisker Shogunate.",
+  cuisine:
+    "Discover the rich food culture, dining customs, and culinary traditions of cat society.",
   culture: "Learn about the arts, customs, and cultural practices that make Neko-kuni unique.",
   factions: "Understand the organizations, guilds, and political groups vying for influence.",
   flora: "Explore the plants, gardens, and botanical knowledge of the realm.",
