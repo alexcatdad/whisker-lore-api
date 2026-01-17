@@ -16,12 +16,4 @@ commit-msg:
     commitlint:
       run: bunx commitlint --edit {1}
 
-pre-push:
-  commands:
-    export-lore:
-      run: |
-        bun run export-lore
-        if [ -n "$(git status --porcelain website/src/content/lore/)" ]; then
-          echo "❌ Lore content is out of sync! Run 'bun run export-lore' and commit the changes."
-          exit 1
-        fi
+# pre-push hook disabled - website now fetches from Convex directly
