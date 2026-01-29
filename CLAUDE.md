@@ -144,4 +144,4 @@ Check ALL lore against these before saving:
 
 - **Database**: Convex (cloud)
 - **MCP config**: `.claude/mcp.json`
-- **Embeddings**: Ollama `nomic-embed-text` (must be running)
+- **Embeddings**: Infinity at `embeddings.triceratops-dory.ts.net` (homelab)

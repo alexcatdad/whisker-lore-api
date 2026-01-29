@@ -1,20 +1,26 @@
 import { createTimer, log } from "./logger.js";
 
-export const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
-export const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL || "nomic-embed-text";
+// Infinity embedding service (OpenAI-compatible API)
+export const EMBEDDING_URL =
+  process.env.EMBEDDING_URL || "https://embeddings.triceratops-dory.ts.net";
+export const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL || "BAAI/bge-large-en-v1.5";
 
-const TIMEOUT_MS = Number.parseInt(process.env.OLLAMA_TIMEOUT_MS || "30000", 10);
-const MAX_RETRIES = Number.parseInt(process.env.OLLAMA_MAX_RETRIES || "3", 10);
+// Legacy Ollama support (set EMBEDDING_URL to http://localhost:11434 and EMBEDDING_MODEL to nomic-embed-text)
+const USE_OLLAMA =
+  EMBEDDING_URL.includes("localhost:11434") || EMBEDDING_URL.includes("127.0.0.1:11434");
+
+const TIMEOUT_MS = Number.parseInt(process.env.EMBEDDING_TIMEOUT_MS || "30000", 10);
+const MAX_RETRIES = Number.parseInt(process.env.EMBEDDING_MAX_RETRIES || "3", 10);
 const RETRY_BASE_DELAY_MS = 1000;
 
-class OllamaError extends Error {
+class EmbeddingError extends Error {
   constructor(
     message: string,
     public readonly statusCode?: number,
     public readonly retryable: boolean = false,
   ) {
     super(message);
-    this.name = "OllamaError";
+    this.name = "EmbeddingError";
   }
 }
 
@@ -31,37 +37,70 @@ async function embedWithRetry(text: string): Promise<number[]> {
     try {
       log.ollamaRequest("embed", EMBEDDING_MODEL);
 
-      const response = await fetch(`${OLLAMA_URL}/api/embeddings`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: EMBEDDING_MODEL,
-          prompt: text,
-        }),
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-      });
+      let response: Response;
+      let embedding: number[];
 
-      if (!response.ok) {
-        const isRetryable = response.status >= 500;
-        throw new OllamaError(
-          `Ollama embedding failed: ${response.status} ${response.statusText}`,
-          response.status,
-          isRetryable,
-        );
+      if (USE_OLLAMA) {
+        // Ollama API
+        response = await fetch(`${EMBEDDING_URL}/api/embeddings`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: EMBEDDING_MODEL,
+            prompt: text,
+          }),
+          signal: AbortSignal.timeout(TIMEOUT_MS),
+        });
+
+        if (!response.ok) {
+          const isRetryable = response.status >= 500;
+          throw new EmbeddingError(
+            `Ollama embedding failed: ${response.status} ${response.statusText}`,
+            response.status,
+            isRetryable,
+          );
+        }
+
+        const data = (await response.json()) as { embedding: number[] };
+        embedding = data.embedding;
+      } else {
+        // Infinity API (OpenAI-compatible)
+        response = await fetch(`${EMBEDDING_URL}/embeddings`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: EMBEDDING_MODEL,
+            input: text,
+          }),
+          signal: AbortSignal.timeout(TIMEOUT_MS),
+        });
+
+        if (!response.ok) {
+          const isRetryable = response.status >= 500;
+          throw new EmbeddingError(
+            `Infinity embedding failed: ${response.status} ${response.statusText}`,
+            response.status,
+            isRetryable,
+          );
+        }
+
+        const data = (await response.json()) as {
+          data: Array<{ embedding: number[] }>;
+        };
+        embedding = data.data[0].embedding;
       }
 
-      const data = (await response.json()) as { embedding: number[] };
       log.ollamaComplete("embed", timer());
-      return data.embedding;
+      return embedding;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
 
-      // Handle timeout (AbortSignal.timeout throws TimeoutError)
+      // Handle timeout
       const isTimeout = lastError.name === "TimeoutError" || lastError.name === "AbortError";
       if (isTimeout) {
         log.ollamaTimeout(TIMEOUT_MS);
-        lastError = new OllamaError(
-          `Ollama request timed out after ${TIMEOUT_MS}ms`,
+        lastError = new EmbeddingError(
+          `Embedding request timed out after ${TIMEOUT_MS}ms`,
           undefined,
           true,
         );
@@ -69,7 +108,7 @@ async function embedWithRetry(text: string): Promise<number[]> {
 
       // Check if we should retry
       const isRetryable =
-        error instanceof OllamaError
+        error instanceof EmbeddingError
           ? error.retryable
           : isTimeout ||
             lastError.message.includes("ECONNREFUSED") ||
@@ -83,12 +122,11 @@ async function embedWithRetry(text: string): Promise<number[]> {
         continue;
       }
 
-      // Not retryable or out of retries
       break;
     }
   }
 
-  throw lastError || new Error("Ollama embedding failed after retries");
+  throw lastError || new Error("Embedding failed after retries");
 }
 
 export async function embed(text: string): Promise<number[]> {
@@ -96,8 +134,7 @@ export async function embed(text: string): Promise<number[]> {
 }
 
 export async function embedBatch(texts: string[]): Promise<number[][]> {
-  // Ollama doesn't have native batch, so we parallelize
-  // But limit concurrency to avoid overwhelming Ollama
+  // Parallelize with limited concurrency
   const CONCURRENCY = 5;
   const results: number[][] = [];
 
@@ -118,28 +155,56 @@ export async function healthCheck(): Promise<{
   const timer = createTimer();
 
   try {
-    const response = await fetch(`${OLLAMA_URL}/api/tags`, {
-      method: "GET",
-      signal: AbortSignal.timeout(5000), // 5s timeout for health check
-    });
+    if (USE_OLLAMA) {
+      // Ollama health check
+      const response = await fetch(`${EMBEDDING_URL}/api/tags`, {
+        method: "GET",
+        signal: AbortSignal.timeout(5000),
+      });
 
-    if (!response.ok) {
-      return {
-        ok: false,
-        error: `Ollama returned ${response.status}`,
-      };
-    }
+      if (!response.ok) {
+        return {
+          ok: false,
+          error: `Ollama returned ${response.status}`,
+        };
+      }
 
-    const data = (await response.json()) as { models?: { name: string }[] };
-    const models = data.models || [];
-    const hasModel = models.some((m) => m.name.startsWith(EMBEDDING_MODEL));
+      const data = (await response.json()) as { models?: { name: string }[] };
+      const models = data.models || [];
+      const hasModel = models.some((m) => m.name.startsWith(EMBEDDING_MODEL));
 
-    if (!hasModel) {
-      return {
-        ok: false,
-        latencyMs: timer(),
-        error: `Model '${EMBEDDING_MODEL}' not found. Available: ${models.map((m) => m.name).join(", ")}`,
-      };
+      if (!hasModel) {
+        return {
+          ok: false,
+          latencyMs: timer(),
+          error: `Model '${EMBEDDING_MODEL}' not found. Available: ${models.map((m) => m.name).join(", ")}`,
+        };
+      }
+    } else {
+      // Infinity health check
+      const response = await fetch(`${EMBEDDING_URL}/models`, {
+        method: "GET",
+        signal: AbortSignal.timeout(5000),
+      });
+
+      if (!response.ok) {
+        return {
+          ok: false,
+          error: `Infinity returned ${response.status}`,
+        };
+      }
+
+      const data = (await response.json()) as { data?: { id: string }[] };
+      const models = data.data || [];
+      const hasModel = models.some((m) => m.id === EMBEDDING_MODEL);
+
+      if (!hasModel) {
+        return {
+          ok: false,
+          latencyMs: timer(),
+          error: `Model '${EMBEDDING_MODEL}' not found. Available: ${models.map((m) => m.id).join(", ")}`,
+        };
+      }
     }
 
     return {
@@ -150,7 +215,10 @@ export async function healthCheck(): Promise<{
     const message = error instanceof Error ? error.message : String(error);
     return {
       ok: false,
-      error: `Cannot reach Ollama: ${message}`,
+      error: `Cannot reach embedding service: ${message}`,
     };
   }
 }
+
+// Legacy export for compatibility
+export const OLLAMA_URL = EMBEDDING_URL;
