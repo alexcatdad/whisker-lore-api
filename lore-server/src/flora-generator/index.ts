@@ -2,18 +2,17 @@
 // Flora Generator - Main Orchestrator
 // Generates 10,000+ flora entries for the Whisker Shogunate lore database
 
-import { connect, bulkInsert } from "../db.js";
-import type { CreateEntryInput } from "../types.js";
-import { CheckpointManager, createConfig } from "./checkpoint.js";
-import { NameRegistry } from "./name-generator.js";
+import { bulkInsert, type CreateEntryInput, connect } from "../services/lore";
 import { generateFloraTemplate } from "./attribute-generator.js";
+import { CheckpointManager, createConfig } from "./checkpoint.js";
 import {
-  generateSkeletonDescription,
   generateProceduralDescription,
+  generateSkeletonDescription,
 } from "./description-generator.js";
-import { validateTemplate, validateContent, sanitizeContent } from "./validation.js";
+import { NameRegistry } from "./name-generator.js";
 import type { FloraCategory, FloraTemplate } from "./types.js";
-import { FLORA_CATEGORIES, DEFAULT_DISTRIBUTION } from "./types.js";
+import { DEFAULT_DISTRIBUTION, FLORA_CATEGORIES } from "./types.js";
+import { sanitizeContent, validateContent, validateTemplate } from "./validation.js";
 
 // Configuration
 const BATCH_SIZE = 10; // Entries per batch
@@ -218,10 +217,10 @@ async function main(): Promise<void> {
   } else {
     const totalTarget = isTest ? 100 : 10000;
     const distribution = isTest
-      ? Object.fromEntries(FLORA_CATEGORIES.map((c) => [c, Math.floor(100 / 9)])) as Record<
+      ? (Object.fromEntries(FLORA_CATEGORIES.map((c) => [c, Math.floor(100 / 9)])) as Record<
           FloraCategory,
           number
-        >
+        >)
       : DEFAULT_DISTRIBUTION;
 
     checkpointData = checkpoint.initialize(totalTarget, distribution);

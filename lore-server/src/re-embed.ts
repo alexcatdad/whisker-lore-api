@@ -8,7 +8,7 @@
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../convex/_generated/api.js";
 import type { Id } from "../../convex/_generated/dataModel.js";
-import { embed } from "./embeddings.js";
+import { embed } from "./services/embeddings";
 
 const CONVEX_URL = process.env.CONVEX_URL || "https://stoic-bird-564.convex.cloud";
 

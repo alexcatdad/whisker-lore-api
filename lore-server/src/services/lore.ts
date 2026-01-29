@@ -155,7 +155,7 @@ export async function searchLore(
 
   return {
     items,
-    nextCursor: hasMore ? items[items.length - 1]?.entry.id ?? null : null,
+    nextCursor: hasMore ? (items[items.length - 1]?.entry.id ?? null) : null,
     hasMore,
   };
 }
@@ -216,7 +216,7 @@ export async function listEntries(
 
   return {
     items,
-    nextCursor: hasMore ? items[items.length - 1]?.id ?? null : null,
+    nextCursor: hasMore ? (items[items.length - 1]?.id ?? null) : null,
     hasMore,
   };
 }
@@ -248,6 +248,34 @@ export async function createEntry(input: CreateEntryInput): Promise<LoreEntry> {
   if (!entry) throw new Error("Failed to fetch created entry");
 
   return convexToEntry(entry);
+}
+
+export async function bulkInsert(entries: CreateEntryInput[]): Promise<number> {
+  // Generate embeddings for all entries
+  const textsToEmbed = entries.map((e) => `${e.title}\n\n${e.content}`);
+  const embeddings = await Promise.all(textsToEmbed.map((t) => embed(t)));
+
+  // Insert one at a time (Convex doesn't have bulk insert via HTTP client)
+  let inserted = 0;
+  for (let i = 0; i < entries.length; i++) {
+    const input = entries[i];
+    try {
+      await getClient().mutation(api.lore.createLore, {
+        title: input.title,
+        content: input.content,
+        category: input.category,
+        tags: input.tags?.length ? input.tags : undefined,
+        parentId: input.parentId,
+        metadata: input.metadata,
+        embedding: embeddings[i],
+      });
+      inserted++;
+    } catch (error) {
+      console.error(`Failed to insert "${input.title}":`, error);
+    }
+  }
+
+  return inserted;
 }
 
 export async function updateEntry(id: string, input: UpdateEntryInput): Promise<LoreEntry | null> {

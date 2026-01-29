@@ -1,7 +1,7 @@
 import { readdir } from "node:fs/promises";
 import * as path from "node:path";
-import * as db from "./db.js";
-import type { CreateEntryInput } from "./types.js";
+import type { CreateEntryInput } from "./services/lore";
+import * as loreService from "./services/lore";
 
 const ORIGINALS_DIR = process.env.ORIGINALS_DIR || "../originals";
 
@@ -183,7 +183,7 @@ async function importFile(filePath: string): Promise<number> {
 
   for (let i = 0; i < validEntries.length; i += batchSize) {
     const batch = validEntries.slice(i, i + batchSize);
-    await db.bulkInsert(batch);
+    await loreService.bulkInsert(batch);
     imported += batch.length;
     console.log(`  Imported ${imported}/${validEntries.length}`);
   }
@@ -194,7 +194,7 @@ async function importFile(filePath: string): Promise<number> {
 async function main() {
   console.log("Whisker Shogunate Lore Importer\n");
 
-  await db.connect();
+  await loreService.connect();
 
   const originalsPath = path.resolve(process.cwd(), ORIGINALS_DIR);
   console.log(`Reading from: ${originalsPath}\n`);
@@ -219,7 +219,7 @@ async function main() {
   console.log(`Total entries: ${totalImported}`);
 
   // Show category breakdown
-  const categories = await db.getCategories();
+  const categories = await loreService.getCategories();
   console.log(`\nCategories: ${categories.join(", ")}`);
 }
 
