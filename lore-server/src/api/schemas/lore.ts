@@ -44,16 +44,32 @@ export const UpdateLoreSchema = t.Object({
   metadata: t.Optional(t.Record(t.String(), t.Unknown())),
 });
 
+// Pagination schemas
+export const PaginationQuerySchema = t.Object({
+  cursor: t.Optional(t.String()),
+  limit: t.Optional(t.Numeric({ default: 20 })),
+});
+
+export const PaginatedResponseSchema = <T extends ReturnType<typeof t.Object>>(itemSchema: T) =>
+  t.Object({
+    items: t.Array(itemSchema),
+    nextCursor: t.Nullable(t.String()),
+    hasMore: t.Boolean(),
+  });
+
 // Query schemas
 export const SearchQuerySchema = t.Object({
   q: t.String({ minLength: 1 }),
   category: t.Optional(t.String()),
+  cursor: t.Optional(t.String()),
   limit: t.Optional(t.Numeric({ default: 10 })),
 });
 
 export const ListQuerySchema = t.Object({
   category: t.Optional(t.String()),
   full: t.Optional(t.BooleanString({ default: false })),
+  cursor: t.Optional(t.String()),
+  limit: t.Optional(t.Numeric({ default: 20 })),
 });
 
 export const ExportQuerySchema = t.Object({

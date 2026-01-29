@@ -12,49 +12,75 @@ import {
   UpdateLoreSchema,
 } from "../schemas/lore";
 
+// Paginated response schemas
+const PaginatedLoreSchema = t.Object({
+  items: t.Array(LoreEntrySchema),
+  nextCursor: t.Nullable(t.String()),
+  hasMore: t.Boolean(),
+});
+
+const PaginatedSummarySchema = t.Object({
+  items: t.Array(LoreSummarySchema),
+  nextCursor: t.Nullable(t.String()),
+  hasMore: t.Boolean(),
+});
+
+const PaginatedSearchSchema = t.Object({
+  items: t.Array(SearchResultSchema),
+  nextCursor: t.Nullable(t.String()),
+  hasMore: t.Boolean(),
+});
+
 export const loreRoutes = new Elysia({ prefix: "/lore" })
   .use(apiKeyGuard)
 
-  // GET /lore/search - Semantic search
+  // GET /lore/search - Semantic search (paginated)
   .get(
     "/search",
     async ({ query }) => {
-      const results = await loreService.searchLore(
-        query.q,
-        query.category,
-        query.limit ? Number(query.limit) : undefined,
-      );
-      return results;
+      const result = await loreService.searchLore(query.q, query.category, {
+        cursor: query.cursor,
+        limit: query.limit ? Number(query.limit) : undefined,
+      });
+      return result;
     },
     {
       query: SearchQuerySchema,
       response: {
-        200: t.Array(SearchResultSchema),
+        200: PaginatedSearchSchema,
       },
     },
   )
 
-  // GET /lore - List entries
+  // GET /lore - List entries (paginated)
   .get(
     "/",
     async ({ query }) => {
-      const entries = await loreService.listEntries(query.category);
+      const result = await loreService.listEntries(query.category, {
+        cursor: query.cursor,
+        limit: query.limit ? Number(query.limit) : undefined,
+      });
 
       if (query.full) {
-        return entries;
+        return result;
       }
 
-      return entries.map((e) => ({
-        id: e.id,
-        title: e.title,
-        category: e.category,
-        tags: e.tags,
-      }));
+      // Transform to summaries while preserving pagination
+      return {
+        items: result.items.map((e) => ({
+          id: e.id,
+          title: e.title,
+          category: e.category,
+          tags: e.tags,
+        })),
+        nextCursor: result.nextCursor,
+        hasMore: result.hasMore,
+      };
     },
     {
       query: ListQuerySchema,
       response: {
-        200: t.Union([t.Array(LoreEntrySchema), t.Array(LoreSummarySchema)]),
+        200: t.Union([PaginatedLoreSchema, PaginatedSummarySchema]),
       },
     },
   )

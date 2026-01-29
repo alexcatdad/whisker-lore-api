@@ -45,6 +45,17 @@ export interface Stats {
   lastUpdated: string | null;
 }
 
+export interface PaginatedResult<T> {
+  items: T[];
+  nextCursor: string | null;
+  hasMore: boolean;
+}
+
+export interface PaginationOptions {
+  cursor?: string;
+  limit?: number;
+}
+
 // Convex client singleton
 function getConvexUrl(): string {
   if (process.env.CONVEX_URL) {
@@ -111,20 +122,42 @@ export async function connect(): Promise<void> {
 export async function searchLore(
   query: string,
   category?: string,
-  limit = 10,
-): Promise<SearchResult[]> {
+  options: PaginationOptions = {},
+): Promise<PaginatedResult<SearchResult>> {
+  const limit = options.limit ?? 10;
+  const fetchLimit = limit + 1;
+
   const queryVector = await embed(query);
 
+  // Fetch more results to handle cursor-based pagination
   const results = await getClient().action(api.lore.searchLore, {
     embedding: queryVector,
     category,
-    limit,
+    limit: 100, // Fetch enough for pagination
   });
 
-  return results.map((r) => ({
+  // Find starting position based on cursor
+  let startIndex = 0;
+  if (options.cursor) {
+    const cursorIndex = results.findIndex((r) => r.entry._id === options.cursor);
+    if (cursorIndex !== -1) {
+      startIndex = cursorIndex + 1;
+    }
+  }
+
+  // Slice the results
+  const sliced = results.slice(startIndex, startIndex + fetchLimit);
+  const hasMore = sliced.length > limit;
+  const items = sliced.slice(0, limit).map((r) => ({
     entry: convexToEntry(r.entry),
     score: r.score,
   }));
+
+  return {
+    items,
+    nextCursor: hasMore ? items[items.length - 1]?.entry.id ?? null : null,
+    hasMore,
+  };
 }
 
 export async function getEntry(id: string): Promise<LoreEntry | null> {
@@ -151,7 +184,45 @@ export async function getEntry(id: string): Promise<LoreEntry | null> {
   return null;
 }
 
-export async function listEntries(category?: string): Promise<LoreEntry[]> {
+export async function listEntries(
+  category?: string,
+  options: PaginationOptions = {},
+): Promise<PaginatedResult<LoreEntry>> {
+  const limit = options.limit ?? 20;
+  // Fetch one extra to determine if there are more results
+  const fetchLimit = limit + 1;
+
+  const results = await getClient().query(api.lore.listLore, {
+    category,
+    limit: 10000, // Convex doesn't support cursor natively, so we fetch all and paginate in memory
+  });
+
+  // Sort by createdAt descending for consistent ordering
+  const sorted = results.sort((a, b) => b.createdAt - a.createdAt);
+
+  // Find starting position based on cursor
+  let startIndex = 0;
+  if (options.cursor) {
+    const cursorIndex = sorted.findIndex((e) => e._id === options.cursor);
+    if (cursorIndex !== -1) {
+      startIndex = cursorIndex + 1; // Start after the cursor
+    }
+  }
+
+  // Slice the results
+  const sliced = sorted.slice(startIndex, startIndex + fetchLimit);
+  const hasMore = sliced.length > limit;
+  const items = sliced.slice(0, limit).map(convexToEntry);
+
+  return {
+    items,
+    nextCursor: hasMore ? items[items.length - 1]?.id ?? null : null,
+    hasMore,
+  };
+}
+
+// Legacy function for internal use (exports, etc.)
+export async function listAllEntries(category?: string): Promise<LoreEntry[]> {
   const results = await getClient().query(api.lore.listLore, {
     category,
     limit: 10000,
@@ -278,7 +349,7 @@ export async function healthCheck(): Promise<{
 }
 
 export async function exportMarkdown(category?: string): Promise<string> {
-  const entries = await listEntries(category);
+  const entries = await listAllEntries(category);
 
   const byCategory = new Map<string, LoreEntry[]>();
   for (const entry of entries) {
