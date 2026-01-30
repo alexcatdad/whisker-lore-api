@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whisker-lore-api
+  namespace: work-apps
+  labels:
+    app: whisker-lore-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whisker-lore-api
+  template:
+    metadata:
+      labels:
+        app: whisker-lore-api
+    spec:
+      imagePullSecrets:
+        - name: zot-pull-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+        - name: whisker-lore-api
+          image: registry.triceratops-dory.ts.net/alexcatdad/whisker-lore-api:IMAGE_TAG
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "3001"
+            - name: CONVEX_URL
+              valueFrom:
+                secretKeyRef:
+                  name: whisker-lore-secrets
+                  key: CONVEX_URL
+            - name: LORE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: whisker-lore-secrets
+                  key: LORE_API_KEY
+                  optional: true
+            - name: EMBEDDING_URL
+              value: "https://embeddings.triceratops-dory.ts.net"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5

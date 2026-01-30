@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whisker-lore-api
+  namespace: work-apps
+spec:
+  ingressClassName: cloudflare-tunnel
+  rules:
+    - host: whisker-lore.escu.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: whisker-lore-api
+                port:
+                  number: 80

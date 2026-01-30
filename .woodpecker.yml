@@ -1,0 +1,36 @@
+steps:
+  - name: build
+    image: woodpeckerci/plugin-kaniko:latest
+    settings:
+      registry: zot.registry.svc.cluster.local:5000
+      repo: alexcatdad/whisker-lore-api
+      tags:
+        - build-${CI_PIPELINE_NUMBER}
+        - latest
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      build_args:
+        - APP_VERSION=build-${CI_PIPELINE_NUMBER}
+      cache: true
+      cache_repo: zot.registry.svc.cluster.local:5000/alexcatdad/whisker-lore-api-cache
+
+  - name: deploy
+    image: alpine/k8s:1.34.0
+    secrets: [convex_url, lore_api_key]
+    commands:
+      - |
+        kubectl create secret generic whisker-lore-secrets -n work-apps \
+          --from-literal=CONVEX_URL="$CONVEX_URL" \
+          --from-literal=LORE_API_KEY="$LORE_API_KEY" \
+          --dry-run=client -o yaml | kubectl apply -f -
+      - sed -i "s/IMAGE_TAG/build-${CI_PIPELINE_NUMBER}/g" k8s/deployment.yaml
+      - kubectl apply -f k8s/ -n work-apps
+      - kubectl rollout status deployment/whisker-lore-api -n work-apps --timeout=120s
+    backend_options:
+      kubernetes:
+        serviceAccountName: woodpecker-deployer
+    when:
+      branch: main
+      event: push

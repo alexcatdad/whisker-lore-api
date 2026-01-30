@@ -1,0 +1,15 @@
+node_modules
+.env*
+!.env.local.example
+data/
+*.log
+.git
+.gitignore
+README.md
+CLAUDE.md
+docs/
+test/
+k8s/
+.woodpecker.yml
+.dockerignore
+Dockerfile
