@@ -44,7 +44,7 @@ spec:
                   key: LORE_API_KEY
                   optional: true
             - name: EMBEDDING_URL
-              value: "https://embeddings.triceratops-dory.ts.net"
+              value: "http://infinity.ai.svc.cluster.local:7997"
           resources:
             requests:
               cpu: 50m
